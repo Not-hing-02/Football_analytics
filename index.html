@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log in · Premier League Analytics</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="layout">
+    <aside class="brand" aria-label="Premier League Analytics">
+      <div>
+        <p class="wordmark">Premier League<br>Analytics</p>
+        <p id="tagline">Analyze. Compare. Explore.</p>
+      </div>
+    </aside>
+    <main>
+      <noscript>Please enable JavaScript to switch between forms.</noscript>
+      <section id="login-panel" aria-labelledby="login-title">
+        <h1 id="login-title" tabindex="-1">Welcome Back</h1>
+        <p class="intro">Log in to save favorite teams and players.</p>
+        <form id="login-form">
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" placeholder="Enter your email" autocomplete="username" required>
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+          <button type="submit" disabled>Log In</button>
+        </form>
+        <p class="switch">Don’t have an account? <a href="#register">Register</a></p>
+        <p id="login-status" class="status" role="status"></p>
+      </section>
+      <section id="register-panel" aria-labelledby="register-title" hidden>
+        <h1 id="register-title" tabindex="-1">Create Your Account</h1>
+        <p class="intro">Join to save your favorite teams and players.</p>
+        <form id="register-form">
+          <label for="register-name">Username</label>
+          <input id="register-name" type="text" placeholder="Enter username" autocomplete="nickname" minlength="2" maxlength="40" required>
+          <label for="register-email">Email</label>
+          <input id="register-email" type="email" placeholder="Enter your email" autocomplete="email" required>
+          <label for="register-password">Password</label>
+          <input id="register-password" type="password" placeholder="At least 8 characters" autocomplete="new-password" minlength="8" required>
+          <label for="register-confirm">Confirm password</label>
+          <input id="register-confirm" type="password" placeholder="Re-enter password" autocomplete="new-password" required>
+          <button type="submit" disabled>Register</button>
+        </form>
+        <p class="switch">Already have an account? <a href="#login">Log in</a></p>
+      </section>
+      <p class="demo-note">Demo forms · Use sample account details.</p>
+    </main>
+  </div>
+</body>
+</html>
