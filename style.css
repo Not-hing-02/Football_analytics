@@ -1,32 +1,47 @@
+/* ตั้งค่าพื้นฐานของหน้าเว็บ: ธีมสว่าง ฟอนต์ สีข้อความ และสีพื้นหลัง */
 :root {
   color-scheme: light;
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   color: #191a26;
   background: #f6f7fb;
 }
+/* รวม padding และเส้นขอบไว้ในความกว้างและความสูงที่กำหนด */
 * { box-sizing: border-box; }
+
+/* ลบระยะขอบเริ่มต้นของหน้า หัวข้อหลัก และย่อหน้า */
 body, h1, p { margin: 0; }
+
+/* ซ่อนองค์ประกอบที่มีแอตทริบิวต์ hidden โดยให้กฎนี้มีลำดับความสำคัญสูง */
 [hidden] { display: none !important; }
+
+/* แบ่งหน้าเป็นสองคอลัมน์: ส่วนแบรนด์ 44% และส่วนเนื้อหา 56% */
 .layout {
+  /* ใช้ vh เป็นค่ารองรับเบราว์เซอร์เก่า และ svh ตามความสูงจอเมื่อแถบเบราว์เซอร์แสดงอยู่ */
   min-height: 100vh;
   min-height: 100svh;
   display: grid;
   grid-template-columns: 44% 56%;
 }
+/* จัดเนื้อหาแบรนด์กึ่งกลางแนวตั้ง พร้อมพื้นหลังเข้มและข้อความสีขาว */
 .brand {
   display: flex;
   align-items: center;
+  /* ระยะด้านข้างปรับตามความกว้างจอ โดยมีค่าต่ำสุด 32px และสูงสุด 100px */
   padding: 60px clamp(32px, 6vw, 100px);
   color: #fff;
   background: #101125;
 }
+/* ชื่อแบรนด์: ตัวหนา ขนาดปรับตามจอในช่วง 35–55px และระยะตัวอักษรชิดขึ้น */
 .wordmark {
   font-size: clamp(35px, 3.2vw, 55px);
   font-weight: 700;
   letter-spacing: -.035em;
   line-height: 1.16;
 }
+/* ข้อความสโลแกนใต้ชื่อแบรนด์ */
 #tagline { margin-top: 12px; color: #c6c5d7; font-size: 15px; }
+
+/* เรียงเนื้อหาหลักในแนวตั้ง และจัดกึ่งกลางทั้งแนวตั้งและแนวนอน */
 main {
   display: flex;
   flex-direction: column;
@@ -34,12 +49,25 @@ main {
   align-items: center;
   padding: 52px 30px;
 }
+/* จำกัดความกว้างเนื้อหาและหมายเหตุไม่เกิน 400px หรือพื้นที่ที่มีอยู่ */
 section, .demo-note { width: min(100%, 400px); }
+
+/* หัวข้อหลัก: ขนาดปรับตามจอในช่วง 28–36px พร้อมกำหนดระยะบรรทัดและตัวอักษร */
 h1 { font-size: clamp(28px, 2.5vw, 36px); line-height: 1.2; letter-spacing: -.035em; }
+
+/* ข้อความอธิบายใต้หัวข้อ ใช้สีเทาและระยะบรรทัดที่อ่านง่าย */
 .intro { margin-top: 8px; color: #646878; line-height: 1.55; font-size: 14px; }
+
+/* เว้นระยะเหนือแบบฟอร์ม */
 form { margin-top: 36px; }
+
+/* ป้ายกำกับช่องกรอกอยู่คนละบรรทัด พร้อมระยะห่างด้านบนและด้านล่าง */
 label { display: block; margin: 24px 0 9px; font-size: 14px; font-weight: 600; }
+
+/* ช่องกรอกและปุ่มกว้างเต็มพื้นที่ ใช้ฟอนต์จากองค์ประกอบแม่ และมีมุมโค้ง */
 input, button { width: 100%; font: inherit; border-radius: 9px; }
+
+/* ช่องกรอกข้อมูล: พื้นขาว เส้นขอบสีอ่อน สูง 48px และเว้นระยะด้านใน */
 input {
   border: 1px solid #d6d9e2;
   padding: 0 17px;
@@ -47,7 +75,10 @@ input {
   color: inherit;
   background: #fff;
 }
+/* ข้อความตัวอย่างในช่องกรอกที่ยังไม่มีข้อมูล */
 input::placeholder { color: #707482; font-size: 14px; }
+
+/* ปุ่มหลัก: พื้นสีม่วง ข้อความสีขาว และเคอร์เซอร์รูปมือเมื่อชี้ */
 button {
   margin-top: 32px;
   min-height: 48px;
@@ -57,19 +88,43 @@ button {
   font-weight: 650;
   cursor: pointer;
 }
+/* ทำให้ปุ่มเข้มขึ้นเมื่อเมาส์ชี้อยู่ */
 button:hover { background: #492092; }
+
+/* สีลิงก์และระยะห่างของเส้นใต้จากข้อความ */
 a { color: #5128a1; text-underline-offset: 3px; }
+
+/* แสดงกรอบโฟกัสเมื่อเบราว์เซอร์เห็นว่าควรแสดง เช่น ขณะใช้ปุ่ม Tab */
 :where(input, button, a):focus-visible { outline: 3px solid #ab8add; outline-offset: 3px; }
+
+/* ไม่แสดงกรอบเมื่อหัวข้อหลักได้รับโฟกัส */
 h1:focus { outline: none; }
+
+/* จัดข้อความสลับแบบฟอร์มและหมายเหตุให้อยู่กึ่งกลางและใช้สีเทา */
 .switch, .demo-note { text-align: center; color: #666a79; }
+
+/* ระยะห่างและขนาดข้อความสำหรับส่วนสลับแบบฟอร์ม */
 .switch { margin-top: 25px; font-size: 14px; line-height: 1.5; }
+
+/* หมายเหตุเกี่ยวกับเดโม ใช้ตัวอักษรขนาดเล็ก */
 .demo-note { margin-top: 17px; font-size: 12px; }
+
+/* ซ่อนพื้นที่สถานะเมื่อไม่มีเนื้อหา เพื่อไม่ให้เกิดช่องว่าง */
 .status:empty { display: none; }
+
+/* รูปแบบข้อความแจ้งสถานะหรือผลการทำงานของแบบฟอร์ม */
 .status { margin-top: 18px; line-height: 1.5; font-size: 14px; color: #432984; }
+
+/* ปรับการแสดงผลสำหรับหน้าจอกว้างไม่เกิน 680px เช่น โทรศัพท์มือถือ */
 @media (max-width: 680px) {
+  /* เปลี่ยนเป็นคอลัมน์เดียว: แบรนด์อยู่ด้านบน เนื้อหาอยู่แถวถัดไป */
   .layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  /* ลดระยะด้านในของส่วนแบรนด์ให้เหมาะกับจอเล็ก */
   .brand { padding: 32px 24px; }
+  /* กำหนดขนาดชื่อแบรนด์บนจอเล็ก */
   .wordmark { font-size: 32px; }
+  /* ลดระยะด้านในและจัดเนื้อหาเริ่มจากด้านบน */
   main { padding: 36px 24px; justify-content: start; }
+  /* ลดระยะห่างเหนือแบบฟอร์ม */
   form { margin-top: 27px; }
 }

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Log in · Premier League Analytics</title>
   <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <script type="module" src="script.js"></script>
 </head>
 <body>
   <div class="layout">
@@ -33,20 +33,24 @@
       <section id="register-panel" aria-labelledby="register-title" hidden>
         <h1 id="register-title" tabindex="-1">Create Your Account</h1>
         <p class="intro">Join to save your favorite teams and players.</p>
-        <form id="register-form">
+        <form id="register-form" novalidate>
           <label for="register-name">Username</label>
           <input id="register-name" type="text" placeholder="Enter username" autocomplete="nickname" minlength="2" maxlength="40" required>
           <label for="register-email">Email</label>
           <input id="register-email" type="email" placeholder="Enter your email" autocomplete="email" required>
           <label for="register-password">Password</label>
-          <input id="register-password" type="password" placeholder="At least 8 characters" autocomplete="new-password" minlength="8" required>
+          <input id="register-password" type="password" placeholder="Create a passphrase" autocomplete="new-password" aria-describedby="password-hint password-feedback" required>
+          <p id="password-hint" class="hint">Use at least 15 characters. Try several unrelated words with spaces.</p>
+          <p id="password-feedback" class="feedback" role="status"></p>
           <label for="register-confirm">Confirm password</label>
-          <input id="register-confirm" type="password" placeholder="Re-enter password" autocomplete="new-password" required>
+          <input id="register-confirm" type="password" placeholder="Re-enter password" autocomplete="new-password" aria-describedby="confirm-feedback" required>
+          <p id="confirm-feedback" class="feedback" role="status"></p>
           <button type="submit" disabled>Register</button>
         </form>
+        <p id="register-status" class="status" role="status"></p>
         <p class="switch">Already have an account? <a href="#login">Log in</a></p>
       </section>
-      <p class="demo-note">Demo forms · Use sample account details.</p>
+      <p id="startup-note" class="demo-note">Start the local server with <code>node server.mjs</code> and open <a href="http://127.0.0.1:3000">http://127.0.0.1:3000</a>.</p>
     </main>
   </div>
 </body>
