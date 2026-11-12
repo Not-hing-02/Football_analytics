@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/layout.css">
+    <script src="js/main-app.js" defer></script>
+    <title>Premier League</title>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="navigator">
+            <div class="top-nav">
+                <div class="brand">
+                    <h1>
+                        Premier League
+                        <p>Analytics</p>
+                    </h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Dashboard</a></li>
+                    <li><a href="teams.html">Teams</a></li>
+                    <li><a href="players.html" class="active">Players</a></li>
+                    <li><a href="matches.html">Matches</a></li>
+                    <li><a href="analytics.html">Analytics</a></li>
+                    <li><a href="compare.html">Compare</a></li>
+                    <li><a href="summary.html">Summary</a></li>
+                    <li><a href="my_fav.html">My Favorites</a></li>
+                </ul>
+            </div>
+            <div class="bottom-nav" hidden>
+                <a href="#" class="btn-logout">
+                    <img src="assets/logout.svg" alt="icon-logout">
+                    Log out
+                </a>
+            </div>
+        </nav>
+
+        <div class="content-wrapper">
+            <header class="header">
+                <div class="left-header">
+                    <h2>Name</h2>
+                </div>
+
+                <div class="right-header">
+                    <form action="search.html" method="GET" class="search-form">
+                        <input type="search" name="search" id="search" placeholder="Search">
+                    </form>
+                    <div class="profile" hidden>
+                        <div class="photo-profile">
+                            <img src="assets/img.png" alt="photo">
+                        </div>
+                        <div class="info-profile">
+                            <p class="name">Username</p>
+                            <p class="role">member</p>
+                        </div>
+                    </div>
+                    <a href="login.html" id="btn-login">Log in</a>
+                </div>
+            </header>
+            <main class="main">
+                <!-- content -->
+            </main>
+        
+        </div>
+        
+    </div>
+</body>
+</html>
