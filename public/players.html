@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/layout.css">
     <script src="js/main-app.js" defer></script>
     <title>Premier League</title>
+    <link rel="stylesheet" href="css/players.css">
+    <script src="js/players.js" defer></script>
 </head>
+
 <body>
 
     <div class="container">
@@ -43,7 +49,7 @@
         <div class="content-wrapper">
             <header class="header">
                 <div class="left-header">
-                    <h2>Name</h2>
+                    <h2>Players</h2>
                 </div>
 
                 <div class="right-header">
@@ -62,12 +68,89 @@
                     <a href="login.html" id="btn-login">Log in</a>
                 </div>
             </header>
-            <main class="main">
-                <!-- content -->
+            <main class="main players-page">
+                <div class="player-filters" role="group" aria-label="Player filters">
+                    <input type="search" id="player-search" placeholder="Search players..."
+                        aria-label="Search players by name">
+
+                    <select id="position-filter" aria-label="Filter by position">
+                        <option value="">Position</option>
+                    </select>
+
+                    <select id="team-filter" aria-label="Filter by team">
+                        <option value="">Team</option>
+                    </select>
+
+                    <button type="button" id="favorites-filter" aria-pressed="false">
+                        My Favorites
+                    </button>
+                </div>
+
+                <div class="player-table-scroll">
+                    <table class="player-list" aria-label="Premier League players">
+                        <thead>
+                            <tr>
+                                <th scope="col">Player</th>
+                                <th scope="col">Team</th>
+                                <th scope="col">Position</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Matches</th>
+                                <th scope="col">Goals</th>
+                                <th scope="col">Rating</th>
+                                <th scope="col" aria-label="Favorite"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="player-rows"></tbody>
+                    </table>
+                </div>
+
+                <p id="no-players" role="status" hidden>No players match your filters.</p>
+                <dialog id="player-dialog" lang="th" aria-labelledby="detail-name">
+                    <h2 id="detail-name"></h2>
+                    <p id="detail-summary"></p>
+
+                    <div class="season-filter">
+                        <label for="detail-season">เลือกฤดูกาล</label>
+                        <select id="detail-season"></select>
+                    </div>
+
+                    <div class="season-scroll">
+                        <table class="season-table" aria-label="สถิตินักเตะแยกตามฤดูกาลและทีม">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ฤดูกาล</th>
+                                    <th scope="col">ทีม</th>
+                                    <th scope="col">จำนวนนัด</th>
+                                    <th scope="col">ประตู</th>
+                                    <th scope="col">แอสซิสต์</th>
+                                    <th scope="col">
+                                        <span class="stat-card yellow" aria-hidden="true"></span>
+                                        ใบเหลือง
+                                    </th>
+                                    <th scope="col">
+                                        <span class="stat-card red" aria-hidden="true"></span>
+                                        ใบแดง
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="season-rows"></tbody>
+                        </table>
+                    </div>
+
+                    <p id="season-empty" hidden>ยังไม่มีข้อมูลฤดูกาลของนักเตะคนนี้</p>
+                    <p class="season-note">
+                        แอสซิสต์ตามเกณฑ์ FPL · ข้อมูลตั้งแต่ 13 พ.ย. 2021 ถึง 13 พ.ย. 2026
+                    </p>
+
+                    <form method="dialog">
+                        <button type="submit">ปิด</button>
+                    </form>
+                </dialog>
             </main>
-        
+
         </div>
-        
+
     </div>
 </body>
+
 </html>

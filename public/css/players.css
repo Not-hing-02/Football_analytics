@@ -1,0 +1,310 @@
+/* สีพื้นหลังของหน้า Players */
+.content-wrapper {
+    min-width: 0;
+    background: #f6f7fb;
+    color: #181a2b;
+}
+
+.players-page {
+    padding-bottom: 36px;
+}
+
+/* ช่องค้นหา ตัวกรอง และปุ่ม My Favorites */
+.player-filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 8px 0 16px;
+}
+
+.player-filters input,
+.player-filters select,
+.player-filters button {
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid #d9ddea;
+    border-radius: 8px;
+    background: white;
+    color: #555d75;
+    font: inherit;
+    font-size: 14px;
+}
+
+#player-search {
+    width: min(30%, 310px);
+    min-height: 42px;
+}
+
+#position-filter,
+#team-filter {
+    min-width: 100px;
+    cursor: pointer;
+}
+
+#favorites-filter {
+    margin-left: auto;
+    min-width: 150px;
+    background: #5b27b6;
+    color: white;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+#favorites-filter[aria-pressed="true"] {
+    background: #37166f;
+    box-shadow: 0 0 0 2px #baa1ef;
+}
+
+/* ตารางนักเตะ */
+.player-table-scroll {
+    overflow-x: auto;
+}
+
+.player-list {
+    width: 100%;
+    min-width: 740px;
+    border-collapse: separate;
+    border-spacing: 0 9px;
+    font-size: 14px;
+}
+
+.player-list th {
+    padding: 6px 8px;
+    color: #71788e;
+    font-size: 11px;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.player-list td {
+    height: 56px;
+    padding: 8px;
+}
+
+.player-list tbody tr:nth-child(odd) {
+    background: white;
+}
+
+.player-list th:first-child,
+.player-list td:first-child {
+    padding-left: 16px;
+}
+
+.player-list td:first-child {
+    border-radius: 7px 0 0 7px;
+}
+
+.player-list td:last-child {
+    border-radius: 0 7px 7px 0;
+}
+
+.player-list th:nth-child(n+4),
+.player-list td:nth-child(n+4) {
+    text-align: center;
+}
+
+/* วงกลมตัวอักษรหน้าชื่อและป้ายคะแนน */
+.player-name {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.player-initial,
+.player-rating {
+    background: #5b27b6;
+    color: white;
+    font-weight: 600;
+}
+
+.player-initial {
+    display: grid;
+    place-items: center;
+    width: 39px;
+    height: 39px;
+    border-radius: 50%;
+}
+
+.player-rating {
+    display: inline-block;
+    min-width: 60px;
+    padding: 9px 12px;
+    border-radius: 8px;
+}
+
+.player-heart {
+    width: 40px;
+    height: 40px;
+    border: 0;
+    background: transparent;
+    color: #737b90;
+    font: 25px/1 Arial, sans-serif;
+    cursor: pointer;
+}
+
+.player-heart[aria-pressed="true"] {
+    color: #e33453;
+}
+
+#no-players {
+    padding: 28px;
+    text-align: center;
+    color: #60697f;
+}
+
+@media (max-width: 760px) {
+    #player-search {
+        width: 100%;
+    }
+
+    #favorites-filter {
+        margin-left: 0;
+        min-width: 0;
+    }
+}.player-detail-button {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+.player-detail-button:hover {
+    color: #5b27b6;
+    text-decoration: underline;
+}
+
+#player-dialog {
+    width: min(400px, 90vw);
+    margin: auto;
+    padding: 28px;
+    border: 1px solid #d9ddea;
+    border-radius: 16px;
+    color: #181a2b;
+    box-shadow: 0 18px 60px rgb(16 17 40 / 18%);
+}
+
+#player-dialog::backdrop {
+    background: rgb(16 17 40 / 55%);
+}
+
+#detail-team {
+    margin-top: 6px;
+    color: #626a80;
+}
+
+.detail-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 22px 0;
+}
+
+.detail-stats div {
+    padding: 14px;
+    border-radius: 10px;
+    background: #f5f2fb;
+}
+
+.detail-stats dt {
+    color: #626a80;
+    font-size: 13px;
+}
+
+.detail-stats dd {
+    margin: 4px 0 0;
+    color: #5023a0;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+#player-dialog button {
+    padding: 9px 18px;
+    border: 0;
+    border-radius: 8px;
+    background: #5b27b6;
+    color: white;
+    cursor: pointer;
+}
+#player-dialog {
+    width: min(860px, 94vw);
+    max-height: 88vh;
+    overflow-y: auto;
+}
+
+#detail-summary,
+.season-note,
+#season-empty {
+    margin: 8px 0 16px;
+    color: #626a80;
+    font-size: 13px;
+}
+
+.season-filter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 22px 0 14px;
+}
+
+.season-filter label {
+    font-weight: 600;
+}
+
+#detail-season {
+    padding: 8px 14px;
+    border: 1px solid #d4d7e2;
+    border-radius: 8px;
+    background: white;
+    color: #25283a;
+    font: inherit;
+    cursor: pointer;
+}
+
+.season-scroll {
+    overflow-x: auto;
+}
+
+.season-table {
+    width: 100%;
+    min-width: 640px;
+    border-collapse: collapse;
+}
+
+.season-table th,
+.season-table td {
+    padding: 14px 9px;
+    border-bottom: 1px solid #d9dbe1;
+    text-align: center;
+}
+
+.season-table th {
+    color: #63697a;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.season-table :is(th, td):nth-child(-n+2) {
+    text-align: left;
+}
+
+.stat-card {
+    display: inline-block;
+    width: 10px;
+    height: 14px;
+    border-radius: 2px;
+    vertical-align: middle;
+}
+
+.stat-card.yellow { background: #ffda32; }
+.stat-card.red { background: #df2739; }
+
+.season-note {
+    margin-top: 14px;
+}
