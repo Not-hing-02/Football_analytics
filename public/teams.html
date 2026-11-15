@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/layout.css">
     <script src="js/main-app.js" defer></script>
+    <link rel="stylesheet" href="css/teams.css">
+    <script src="js/teams.js" defer></script>
     <title>Premier League</title>
 </head>
+
 <body>
 
     <div class="container">
@@ -43,7 +49,7 @@
         <div class="content-wrapper">
             <header class="header">
                 <div class="left-header">
-                    <h2>Name</h2>
+                    <h2>Teams</h2>
                 </div>
 
                 <div class="right-header">
@@ -63,11 +69,59 @@
                 </div>
             </header>
             <main class="main">
-                <!-- content -->
+                <div class="team-filters">
+                    <input id="team-search" type="search" placeholder="Search teams..." aria-label="Search teams">
+
+                    <select id="team-season" aria-label="Season"></select>
+
+                    <select id="stadium-filter" aria-label="Stadium">
+                        <option value="">All stadiums</option>
+                    </select>
+
+                    <select id="city-filter" aria-label="City">
+                        <option value="">All cities</option>
+                    </select>
+
+                    <button id="team-favorites" type="button" aria-pressed="false">
+                        My Favorites
+                    </button>
+                </div>
+
+                <p id="team-status" role="status">กำลังโหลดข้อมูลทีม...</p>
+                <button id="team-retry" type="button" hidden>ลองอีกครั้ง</button>
+
+                <div class="standings-scroll">
+                    <table class="standings" aria-label="สถิติทีมในฤดูกาลที่เลือก">
+                        <thead>
+                            <tr>
+                                <th scope="col">ทีม</th>
+                                <th scope="col">แข่ง</th>
+                                <th scope="col">ชนะ</th>
+                                <th scope="col">เสมอ</th>
+                                <th scope="col">แพ้</th>
+                                <th scope="col">ได้</th>
+                                <th scope="col">เสีย</th>
+                                <th scope="col">ต่าง</th>
+                                <th scope="col">แต้ม</th>
+                                <th scope="col">โปรด</th>
+                            </tr>
+                        </thead>
+                        <tbody id="team-grid"></tbody>
+                    </table>
+                </div>
+                <dialog id="team-dialog" aria-labelledby="team-detail-name">
+                    <h2 id="team-detail-name"></h2>
+                    <p id="team-detail-info"></p>
+                    <dl id="team-detail-stats"></dl>
+                    <form method="dialog">
+                        <button type="submit">Close</button>
+                    </form>
+                </dialog>
             </main>
-        
+
         </div>
-        
+
     </div>
 </body>
+
 </html>

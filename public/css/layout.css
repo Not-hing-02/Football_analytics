@@ -234,3 +234,110 @@
   margin-top: 6px;
   padding: 0 30px;
 }
+
+
+
+
+/* หัวใจของหน้า Players และ Teams */
+body .player-heart,
+body .standings-heart {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #788096;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: background-color 160ms ease, color 160ms ease;
+}
+
+body .player-heart svg,
+body .standings-heart svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+body .player-heart:hover,
+body .standings-heart:hover {
+    background: #fff0f3;
+    color: #e33453;
+}
+
+body .player-heart[aria-pressed="true"],
+body .standings-heart[aria-pressed="true"] {
+    color: #e33453;
+}
+
+body .player-heart[aria-pressed="true"] svg,
+body .standings-heart[aria-pressed="true"] svg {
+    fill: currentColor;
+}
+
+/* ปุ่ม My Favorites ทั้งสองหน้า */
+body #favorites-filter,
+body #team-favorites {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    min-height: 40px;
+    min-width: 150px;
+    margin-left: auto;
+    padding: 0 18px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: #5b27b6;
+    color: white;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 160ms ease;
+}
+
+body #favorites-filter:hover,
+body #team-favorites:hover {
+    background: #492090;
+}
+
+body #favorites-filter[aria-pressed="true"],
+body #team-favorites[aria-pressed="true"] {
+    background: #37166f;
+    box-shadow: 0 0 0 2px #baa1ef;
+}
+
+body .player-heart:focus-visible,
+body .standings-heart:focus-visible,
+body #favorites-filter:focus-visible,
+body #team-favorites:focus-visible {
+    outline: 2px solid #9272e1;
+    outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+    body #favorites-filter,
+    body #team-favorites {
+        margin-left: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body .player-heart,
+    body .standings-heart,
+    body #favorites-filter,
+    body #team-favorites {
+        transition: none;
+    }
+}
