@@ -47,3 +47,39 @@ both final scores. Top Scorers uses the player stats recorded for completed
 matches. Export Report downloads a CSV of the current dashboard selection with
 coverage, outcomes, monthly chart values and sample sizes, and the scorer
 ranking.
+
+## Compare Players
+
+Open [Compare Players](http://localhost:3000/compare.html) after starting the
+server with the PostgreSQL setup above. The season selector uses the existing
+`GET /api/analytics/filters` endpoint.
+
+| Endpoint | Parameters | Response |
+| --- | --- | --- |
+| `GET /api/compare/players/options` | Required `seasonId`. | `{ seasonId, players: [{ id, name, fullName, team, position }] }`. An existing season can return an empty player list. |
+| `GET /api/compare/players` | Required `seasonId`, `playerA` and `playerB`. | `{ seasonId, players: [{ id, metrics }, { id, metrics }] }` in A/B order. |
+
+IDs are positive PostgreSQL integers. Invalid, repeated or unknown parameters
+and identical player IDs return `400`. An unknown season or a player without a
+recorded appearance in that season returns `404`. Database failures return
+`500`. Error responses contain `{ error }`.
+
+Eligibility and all totals use recorded appearances with minutes played in
+completed matches. Cards show the latest recorded club and position within the
+selected season. Totals include all of a player's appearances across clubs in
+that season, including the available records for partial seasons.
+
+| Metric key | Calculation |
+| --- | --- |
+| `goals` | Sum of recorded goals |
+| `assists` | Sum of Fantasy Premier League assists |
+| `matchesPlayed` | Count of recorded appearances |
+| `passAccuracy` | `null` because the schema lacks attempted passes needed for a weighted season percentage |
+| `shots`, `shotsOnTarget` | Sum each field when every recorded appearance has a value. Otherwise return `null`. |
+| `averageRating` | Mean of recorded `rating_10` values when every recorded appearance has a rating. Otherwise return `null`. |
+| `yellowCards` | Sum of recorded yellow cards |
+
+The supplied data has only partial coverage for player shots and no recorded
+ratings. The UI shows `N/A` with a reason for null metrics. Each count row shares
+the same scale for both players, up to the largest available count in that row
+(minimum scale of 1). Pass accuracy and rating use fixed scales of 100 and 10.
