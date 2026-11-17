@@ -241,7 +241,7 @@ app.get("/api/teams", async (req, res) => {
     }
 });
 
-// GET /api/analytics/filters: seasons and their eligible teams (no query parameters).
+// GET /api/analytics/filters คืนฤดูกาลและทีมที่เลือกได้ในแต่ละฤดูกาล โดยไม่รับ query parameter
 app.get("/api/analytics/filters", async (req, res) => {
     if (Object.keys(req.query).length) {
         return res.status(400).json({ error: "This endpoint takes no filters." });
@@ -265,6 +265,7 @@ app.get("/api/analytics/filters", async (req, res) => {
     }
 });
 
+// ตรวจ ID ให้เป็นจำนวนเต็มบวกในช่วง integer ของ PostgreSQL ก่อนส่งเข้า SQL
 function analyticsId(value) {
     if (typeof value !== "string" || !/^[1-9]\d{0,9}$/.test(value)) return null;
     const id = Number(value);
@@ -272,7 +273,7 @@ function analyticsId(value) {
 }
 
 // GET /api/analytics/dashboard?seasonId=<id>[&teamId=<id>]
-// One snapshot for the four cards and the CSV export. An omitted teamId selects the league.
+// ใช้ข้อมูลชุดเดียวกันสำหรับกราฟและ CSV หากไม่ระบุ teamId จะสรุปทั้งลีก
 app.get("/api/analytics/dashboard", async (req, res) => {
     const { seasonId, teamId, ...unknown } = req.query;
     const season = analyticsId(seasonId);
@@ -302,11 +303,13 @@ app.get("/api/analytics/dashboard", async (req, res) => {
                 WHERE m.status = 'completed'
                     AND ($2 IS NULL OR $2 IN (m.home_team_id, m.away_team_id))
             ), scored AS (
+                -- แยกนัดที่มีสกอร์ครบเพื่อไม่ให้สกอร์ที่หายไปถูกตีความเป็นศูนย์
                 SELECT * FROM completed WHERE home_goals IS NOT NULL AND away_goals IS NOT NULL
             ), monthly AS (
                 SELECT to_char(match_date, 'YYYY-MM') AS month, COUNT(*)::int AS matches,
                     ROUND(AVG(goals_for), 2) AS goals_per_match,
                     ROUND(AVG(CASE
+                        -- เมื่อดูทั้งลีก หารแต้มรวมของสองทีมด้วยสองเพื่อให้ได้แต้มต่อทีมต่อนัด
                         WHEN $2 IS NULL THEN CASE WHEN outcome_for = outcome_against THEN 1.0 ELSE 1.5 END
                         WHEN outcome_for > outcome_against THEN 3.0
                         WHEN outcome_for = outcome_against THEN 1.0 ELSE 0.0 END), 2) AS points_per_match
@@ -348,7 +351,7 @@ app.get("/api/analytics/dashboard", async (req, res) => {
 });
 
 // GET /api/compare/players/options?seasonId=<id>
-// List players with a completed appearance and their latest recorded club and position in that season.
+// แสดงเฉพาะผู้เล่นที่ลงสนามในนัดที่จบแล้ว พร้อมสโมสรและตำแหน่งล่าสุดในฤดูกาลที่เลือก
 app.get("/api/compare/players/options", async (req, res) => {
     const { seasonId, ...unknown } = req.query;
     const season = analyticsId(seasonId);
@@ -358,6 +361,7 @@ app.get("/api/compare/players/options", async (req, res) => {
     try {
         const { rows } = await pool.query(`
             WITH latest AS (
+                -- ใช้ข้อมูลจากนัดล่าสุดในฤดูกาลที่เลือก เพื่อให้สโมสรบนการ์ดตรงกับช่วงเวลาที่เปรียบเทียบ
                 SELECT DISTINCT ON (x.player_id) x.player_id, x.team_id, x.position
                 FROM pl_history.player_match_stats x
                 JOIN pl_history.matches m USING (match_id)
@@ -384,7 +388,7 @@ app.get("/api/compare/players/options", async (req, res) => {
 });
 
 // GET /api/compare/players?seasonId=<id>&playerA=<id>&playerB=<id>
-// Return season totals in selection order, with nulls for metrics without full coverage.
+// คืนสถิติรวมของฤดูกาลตามลำดับผู้เล่น A และ B โดยใช้ null สำหรับสถิติที่ข้อมูลไม่ครบ
 app.get("/api/compare/players", async (req, res) => {
     const { seasonId, playerA, playerB, ...unknown } = req.query;
     const season = analyticsId(seasonId);
@@ -400,7 +404,9 @@ app.get("/api/compare/players", async (req, res) => {
                     'goals', SUM(x.goals),
                     'assists', SUM(x.assists_fpl),
                     'matchesPlayed', COUNT(*),
+                    -- ไม่คำนวณความแม่นยำในการจ่ายบอลจากเปอร์เซ็นต์รายนัด เพราะไม่มีจำนวนครั้งที่พยายามจ่ายสำหรับถ่วงน้ำหนัก
                     'passAccuracy', NULL::numeric,
+                    -- ใช้ข้อมูลครบทุกนัดที่ผู้เล่นลงสนาม เพื่อไม่ให้ยอดรวมหรือค่าเฉลี่ยจากข้อมูลบางนัดดูเหมือนสถิติทั้งฤดูกาล
                     'shots', CASE WHEN COUNT(x.shots) = COUNT(*) THEN SUM(x.shots) END,
                     'shotsOnTarget', CASE WHEN COUNT(x.shots_on_target) = COUNT(*) THEN SUM(x.shots_on_target) END,
                     'averageRating', CASE WHEN COUNT(x.rating_10) = COUNT(*) THEN ROUND(AVG(x.rating_10), 2) END,

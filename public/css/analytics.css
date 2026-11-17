@@ -183,6 +183,7 @@
     background: linear-gradient(#e7e7f2, #e7e7f2) 0 var(--plot-height) / 100% 1px no-repeat;
 }
 
+/* กำหนดความกว้างขั้นต่ำเพื่อให้ชื่อเดือนยังอ่านได้เมื่อกราฟต้องเลื่อนในจอแคบ */
 .analytics-plot li {
     flex: 1 0 26px;
     text-align: center;

@@ -58,6 +58,7 @@
     background: #fff;
 }
 
+/* ใช้สีประจำฝั่งร่วมกันระหว่างการ์ดผู้เล่นกับแท่งเปรียบเทียบ */
 .compare-left { --player-color: var(--blue); }
 .compare-right { --player-color: var(--red); }
 

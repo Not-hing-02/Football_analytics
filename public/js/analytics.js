@@ -32,6 +32,7 @@ async function getJson(path, signal) {
     return response.json();
 }
 
+// คงทีมที่เลือกไว้เมื่อทีมนั้นยังอยู่ในฤดูกาลใหม่ เพื่อให้เปรียบเทียบข้ามฤดูกาลได้ต่อเนื่อง
 function updateTeams() {
     const previous = teamSelect.value;
     const season = seasons.find((option) => String(option.id) === seasonSelect.value);
@@ -44,6 +45,7 @@ function outcomeLabels(team) {
     return team ? ["Wins", "Draws", "Losses"] : ["Home wins", "Draws", "Away wins"];
 }
 
+// เมื่อเลือกทั้งลีก ให้อ่านผลจากมุมของทีมเจ้าบ้าน เพื่อให้นับแต่ละนัดเพียงครั้งเดียว
 function renderOutcomes({ team, outcomes }) {
     const target = element("outcomes");
     const { wins, draws, losses } = outcomes;
@@ -139,6 +141,7 @@ function renderReport(data) {
     exportButton.disabled = !completedMatches;
 }
 
+// ยกเลิกคำขอก่อนหน้าเมื่อเปลี่ยนตัวกรอง เพื่อไม่ให้ผลที่มาช้ากว่าแทนที่ข้อมูลล่าสุด
 async function loadDashboard() {
     request?.abort();
     request = new AbortController();
@@ -181,11 +184,13 @@ async function loadFilters() {
     }
 }
 
+// ป้องกันโปรแกรมสเปรดชีตตีความข้อความใน CSV เป็นสูตรเมื่อเปิดไฟล์
 function csvCell(value) {
     const safe = typeof value === "string" && /^[\s]*[=+@-]|^[\t\r\n]/.test(value) ? "'" + value : value;
     return '"' + String(safe ?? "").replaceAll('"', '""') + '"';
 }
 
+// ส่งออกจากข้อมูลที่หน้าเว็บแสดงอยู่ เพื่อให้รายงานตรงกับตัวกรองและค่าบนกราฟ
 function exportReport() {
     if (!report) return;
     const { season, team, coverage, outcomes, monthly, scorers } = report;

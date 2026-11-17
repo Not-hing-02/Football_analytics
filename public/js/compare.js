@@ -43,6 +43,7 @@ function compareMessage(text, retry) {
     compareRetry.hidden = !retry;
 }
 
+// ยกเลิกคำขอก่อนหน้าเพื่อไม่ให้ผลของผู้เล่นหรือฤดูกาลเดิมแสดงทับผลล่าสุด
 function nextCompareRequest() {
     pending?.abort();
     pending = new AbortController();
@@ -74,6 +75,7 @@ function renderCards(cards = selected) {
     });
 }
 
+// ให้ค้นหาชื่อผู้เล่นได้แม้พิมพ์โดยไม่ใส่เครื่องหมายกำกับเสียง
 function searchable(value) {
     return value.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 }
@@ -114,6 +116,7 @@ function openPlayerPicker(slot) {
     compareSearch.focus();
 }
 
+// ค่าที่หายไปต้องมีคำอธิบายและไม่มีแท่ง เพื่อให้แยกจากค่าศูนย์ได้ชัดเจน
 function renderMetricValue(player, slot, value, metric, scale, noteId) {
     const side = slot === 0 ? "left" : "right";
     const cell = compareNode("div", `compare-value compare-${side}`);
@@ -142,6 +145,7 @@ function renderComparison(data) {
     const notes = [];
     const rows = metricDefinitions.map((metric) => {
         const values = stats.map((metrics) => metrics[metric.key]);
+        // ใช้สเกลเดียวกันทั้งสองฝั่งเพื่อให้ความยาวแท่งสะท้อนสัดส่วนของค่าจริง
         const scale = metric.max ?? Math.max(1, ...values.filter((value) => value != null));
         const noteId = `compare-note-${metric.key}`;
         if (values.some((value) => value == null)) {
@@ -194,6 +198,7 @@ async function loadSeasonPlayers() {
         const data = await compareJson(`/api/compare/players/options?${params}`, signal);
         if (signal.aborted) return;
         players = data.players;
+        // คงผู้เล่นที่ยังมีข้อมูลในฤดูกาลใหม่ และล้างเฉพาะฝั่งที่ต้องเลือกใหม่
         selected = selected.map((previous) => players.find(({ id }) => id === previous?.id) ?? null);
         renderCards();
         if (players.length < 2) {
