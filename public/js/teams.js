@@ -1,9 +1,11 @@
-let teams = [];
+let teams;
 let favoritesOnly = false;
 let savedTeams = new Set();
 
 const favoritesKey = "football.teams.favorites.v1";
 const grid = document.getElementById("team-grid");
+const cardTemplate = document.getElementById("team-card-template");
+const dialog = document.getElementById("team-dialog");
 const statusMessage = document.getElementById("team-status");
 const retryButton = document.getElementById("team-retry");
 const nameSearch = document.getElementById("team-search");
@@ -37,13 +39,13 @@ function updateSeasonFilters() {
 
     fillOptions(
         stadiumFilter,
-        selectedTeams.map(team => team.stadium),
+        selectedTeams.map(team => team.stadium).filter(Boolean),
         "All stadiums"
     );
 
     fillOptions(
         cityFilter,
-        selectedTeams.map(team => team.city),
+        selectedTeams.map(team => team.city).filter(Boolean),
         "All cities"
     );
 
@@ -52,79 +54,43 @@ function updateSeasonFilters() {
 
 function openTeamDetails(team) {
     document.getElementById("team-detail-name").textContent = team.name;
-    document.getElementById("team-detail-info").textContent =
-        `${team.season} · ${team.stadium} · ${team.city}`;
-
-    const stats = document.getElementById("team-detail-stats");
-    stats.replaceChildren();
-
-    const values = [
-        ["Played", team.played],
-        ["Wins", team.wins],
-        ["Draws", team.draws],
-        ["Losses", team.losses],
-        ["Goals for", team.goals_for],
-        ["Goals against", team.goals_against]
-    ];
-
-    for (const [label, value] of values) {
-        const group = document.createElement("div");
-        const title = document.createElement("dt");
-        const number = document.createElement("dd");
-
-        title.textContent = label;
-        number.textContent = value;
-        group.append(title, number);
-        stats.append(group);
-    }
-
-    document.getElementById("team-dialog").showModal();
+    document.getElementById("team-detail-abbreviation").textContent = team.abbreviation || "—";
+    document.getElementById("team-detail-stadium").textContent = team.stadium || "—";
+    document.getElementById("team-detail-city").textContent = team.city || "—";
+    dialog.showModal();
 }
 
-function createTeamRow(team) {
-    const row = document.createElement("tr");
+function createTeamCard(team) {
+    const card = cardTemplate.content.firstElementChild.cloneNode(true);
 
-    const nameButton = document.createElement("button");
-    nameButton.type = "button";
-    nameButton.className = "standings-team";
-    nameButton.textContent = team.name;
-    nameButton.setAttribute("aria-haspopup", "dialog");
-    nameButton.addEventListener("click", () => openTeamDetails(team));
-    row.insertCell().append(nameButton);
+    card.querySelector(".team-badge").textContent =
+        team.abbreviation || team.name.slice(0, 3).toUpperCase();
+    card.querySelector(".team-name").textContent = team.name;
+    card.querySelector(".team-stadium").textContent = team.stadium || "—";
 
-    const fields = [
-        "played",
-        "wins",
-        "draws",
-        "losses",
-        "goals_for",
-        "goals_against",
-        "goal_difference",
-        "points"
+    const record = card.querySelector(".team-record");
+    const seasonTotals = [
+        ["Wins", team.wins],
+        ["Draws", team.draws],
+        ["Losses", team.losses]
     ];
 
-    for (const field of fields) {
-        const cell = row.insertCell();
-        cell.textContent = team[field];
-
-        if (field === "points") {
-            cell.className = "standings-points";
-        }
+    for (const [label, value] of seasonTotals) {
+        const stat = document.createElement("span");
+        const abbreviation = document.createElement("abbr");
+        abbreviation.title = label;
+        abbreviation.textContent = label[0];
+        stat.append(abbreviation, ` ${value ?? "—"}`);
+        record.append(stat);
     }
 
-    const heart = document.createElement("button");
-    heart.type = "button";
-    heart.className = "standings-heart";
+    const details = card.querySelector(".team-details");
+    details.setAttribute("aria-label", `View details for ${team.name}`);
+    details.addEventListener("click", () => openTeamDetails(team));
+
+    const heart = card.querySelector(".team-heart");
     heart.setAttribute("aria-label", `Favorite ${team.name}`);
     heart.setAttribute("aria-pressed", String(savedTeams.has(team.id)));
-
-    heart.innerHTML = `
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67
-                l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78
-                L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"/>
-        </svg>
-    `;
 
     heart.addEventListener("click", () => {
         if (savedTeams.has(team.id)) {
@@ -147,26 +113,31 @@ function createTeamRow(team) {
         }
     });
 
-    row.insertCell().append(heart);
-    return row;
+    return card;
 }
+
 function renderTeams() {
+    if (!teams) {
+        return;
+    }
+
     const nameQuery = nameSearch.value.trim().toLowerCase();
     const generalQuery = headerSearch.value.trim().toLowerCase();
 
     const visibleTeams = teams.filter(team => {
-        const searchable = `${team.name} ${team.stadium} ${team.city}`
-            .toLowerCase();
+        const name = team.name.toLowerCase();
+        const code = team.abbreviation?.toLowerCase() ?? "";
+        const searchable = [name, code, team.stadium, team.city].join(" ").toLowerCase();
 
         return String(team.season_id) === seasonFilter.value
-            && team.name.toLowerCase().includes(nameQuery)
+            && (name.includes(nameQuery) || code.includes(nameQuery))
             && searchable.includes(generalQuery)
             && (!stadiumFilter.value || team.stadium === stadiumFilter.value)
             && (!cityFilter.value || team.city === cityFilter.value)
             && (!favoritesOnly || savedTeams.has(team.id));
     });
 
-    grid.replaceChildren(...visibleTeams.map(createTeamRow));
+    grid.replaceChildren(...visibleTeams.map(createTeamCard));
     statusMessage.textContent = "ไม่พบทีมที่ตรงกับตัวกรอง";
     statusMessage.hidden = visibleTeams.length > 0;
 }
@@ -183,7 +154,7 @@ async function loadTeams() {
             throw new Error(`Unable to load teams (${response.status})`);
         }
 
-        teams = await response.json();
+        teams = (await response.json()).sort((a, b) => a.name.localeCompare(b.name, "en"));
 
         const seasons = [...new Map(
             teams.map(team => [team.season_id, team.season])

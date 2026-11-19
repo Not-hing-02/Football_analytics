@@ -1,4 +1,9 @@
 let players = [];
+const playersPerPage = 30;
+let currentPlayerPage = 1;
+const playersPrev = document.getElementById("players-prev");
+const playersNext = document.getElementById("players-next");
+const playersPageInfo = document.getElementById("players-page-info");
 const tableBody = document.getElementById("player-rows");
 const playerSearch = document.getElementById("player-search");
 const headerSearch = document.getElementById("search");
@@ -224,25 +229,60 @@ function renderPlayers() {
             && (!showFavoritesOnly || favorites.has(player.name));
     });
 
+    const totalPlayers = visiblePlayers.length;
+    const totalPages = Math.max(
+        1,
+        Math.ceil(totalPlayers / playersPerPage)
+    );
+
+    currentPlayerPage = Math.min(
+        Math.max(1, currentPlayerPage),
+        totalPages
+    );
+
+    const start = (currentPlayerPage - 1) * playersPerPage;
+    const pagePlayers = visiblePlayers.slice(start, start + playersPerPage);
+
     tableBody.replaceChildren();
-    visiblePlayers.forEach(addPlayerRow);
-    emptyMessage.hidden = visiblePlayers.length > 0;
+    pagePlayers.forEach(addPlayerRow);
+
+    emptyMessage.hidden = totalPlayers > 0;
+
+    playersPrev.disabled = currentPlayerPage <= 1;
+    playersNext.disabled = currentPlayerPage >= totalPages;
+
+    playersPageInfo.textContent =
+    `${currentPlayerPage} / ${totalPages} · ${totalPlayers} คน`;
 }
 
-playerSearch.addEventListener("input", renderPlayers);
-headerSearch.addEventListener("input", renderPlayers);
-positionFilter.addEventListener("change", renderPlayers);
-teamFilter.addEventListener("change", renderPlayers);
+function resetPlayerPage() {
+    currentPlayerPage = 1;
+    renderPlayers();
+}
 
-// ให้กด Enter ในช่อง Search ด้านบนแล้วค้นหาอยู่ที่หน้า Players
+playerSearch.addEventListener("input", resetPlayerPage);
+headerSearch.addEventListener("input", resetPlayerPage);
+positionFilter.addEventListener("change", resetPlayerPage);
+teamFilter.addEventListener("change", resetPlayerPage);
+
 headerSearch.form?.addEventListener("submit", event => {
     event.preventDefault();
-    renderPlayers();
+    resetPlayerPage();
 });
 
 favoritesButton.addEventListener("click", () => {
     showFavoritesOnly = !showFavoritesOnly;
     favoritesButton.setAttribute("aria-pressed", String(showFavoritesOnly));
+    resetPlayerPage();
+});
+
+playersPrev.addEventListener("click", () => {
+    currentPlayerPage--;
+    renderPlayers();
+});
+
+playersNext.addEventListener("click", () => {
+    currentPlayerPage++;
     renderPlayers();
 });
 

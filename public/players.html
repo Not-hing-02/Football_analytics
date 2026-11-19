@@ -105,12 +105,19 @@
                 </div>
 
                 <p id="no-players" role="status" hidden>No players match your filters.</p>
+                <nav class="players-pagination" aria-label="หน้ารายชื่อนักเตะ">
+                    <button id="players-prev" type="button" disabled>Previous</button>
+
+                    <span id="players-page-info" aria-live="polite"></span>
+
+                    <button id="players-next" type="button" disabled>Next</button>
+                </nav>
                 <dialog id="player-dialog" lang="th" aria-labelledby="detail-name">
                     <h2 id="detail-name"></h2>
                     <p id="detail-summary"></p>
 
                     <div class="season-filter">
-                        <label for="detail-season">เลือกฤดูกาล</label>
+                        <label for="detail-season">Select a season</label>
                         <select id="detail-season"></select>
                     </div>
 
@@ -118,18 +125,18 @@
                         <table class="season-table" aria-label="สถิตินักเตะแยกตามฤดูกาลและทีม">
                             <thead>
                                 <tr>
-                                    <th scope="col">ฤดูกาล</th>
-                                    <th scope="col">ทีม</th>
-                                    <th scope="col">จำนวนนัด</th>
-                                    <th scope="col">ประตู</th>
-                                    <th scope="col">แอสซิสต์</th>
+                                    <th scope="col">Season</th>
+                                    <th scope="col">Team</th>
+                                    <th scope="col">Number of matches</th>
+                                    <th scope="col">Golas</th>
+                                    <th scope="col">Assist</th>
                                     <th scope="col">
                                         <span class="stat-card yellow" aria-hidden="true"></span>
-                                        ใบเหลือง
+                                        Yellow card
                                     </th>
                                     <th scope="col">
                                         <span class="stat-card red" aria-hidden="true"></span>
-                                        ใบแดง
+                                        Red card
                                     </th>
                                 </tr>
                             </thead>
@@ -137,13 +144,11 @@
                         </table>
                     </div>
 
-                    <p id="season-empty" hidden>ยังไม่มีข้อมูลฤดูกาลของนักเตะคนนี้</p>
-                    <p class="season-note">
-                        แอสซิสต์ตามเกณฑ์ FPL · ข้อมูลตั้งแต่ 13 พ.ย. 2021 ถึง 13 พ.ย. 2026
-                    </p>
+                    <p id="season-empty" hidden>There is no seasonal data available for this player.</p>
+
 
                     <form method="dialog">
-                        <button type="submit">ปิด</button>
+                        <button type="submit">Close</button>
                     </form>
                 </dialog>
             </main>
