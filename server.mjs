@@ -1,11 +1,12 @@
 import express from "express";
 import { fileURLToPath } from "node:url";
 
+import analyticsRouter from "./routes/analytics.mjs";
+import compareRouter from "./routes/compare.mjs";
+import compareTeamsRouter from "./routes/compare-teams.mjs";
 import playersRouter from "./routes/players.mjs";
 import teamsRouter from "./routes/teams.mjs";
 import matchesRouter from "./routes/matches.mjs";
-import analyticsRouter from "./routes/analytics.mjs";
-import compareRouter from "./routes/compare.mjs";
 import favoritesRouter from "./routes/favorites.mjs";
 import dashboardRouter from "./src/server-dashboard.js";
 import myfavRouter from "./src/server-myfav.js";
@@ -29,6 +30,7 @@ app.use("/api/analytics", analyticsRouter);
 app.use("/api/compare", compareRouter);
 app.use("/api/favorites", favoritesRouter);
 app.use("/api", dashboardRouter, myfavRouter, searchRouter, standingRouter);
+app.use("/api/compare/teams", compareTeamsRouter);
 
 app.listen(port, () => {
     console.log(`Open http://localhost:${port}/players.html`);

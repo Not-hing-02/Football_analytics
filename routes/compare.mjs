@@ -25,7 +25,19 @@ router.get("/players/options", async (req, res) => {
             SELECT s.season_id AS "seasonId", COALESCE((
                 SELECT json_agg(json_build_object(
                     'id', p.player_id, 'name', p.display_name, 'fullName', p.player_name,
-                    'team', t.team_name, 'position', l.position
+                    'team', t.team_name, 'position', l.position,
+                    'teams', (
+                        -- เก็บทุกสโมสรที่มีนัดลงสนามในฤดูกาลเดียวกัน เพื่อรองรับการย้ายทีม
+                        SELECT json_agg(clubs ORDER BY clubs.name, clubs.id)
+                        FROM (
+                            SELECT DISTINCT t2.team_id AS id, t2.team_name AS name
+                            FROM pl_history.player_match_stats x2
+                            JOIN pl_history.matches m2 USING (match_id)
+                            JOIN pl_history.teams t2 ON t2.team_id = x2.team_id
+                            WHERE x2.player_id = l.player_id AND m2.season_id = $1
+                                AND m2.status = 'completed' AND x2.minutes > 0
+                        ) clubs
+                    )
                 ) ORDER BY p.display_name, p.player_id)
                 FROM latest l
                 JOIN pl_history.players p USING (player_id)
