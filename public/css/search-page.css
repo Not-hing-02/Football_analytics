@@ -31,6 +31,12 @@
     border: 1px solid #5C26B8;
     border-radius: 10px;
     font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.search-bar-group #search:focus {
+    outline: none;
+    box-shadow: 0 0 0 1px #351076;
 }
 
 .search-bar-group .btn-search {
@@ -45,6 +51,16 @@
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.search-bar-group .btn-search:hover {
+    background-color: #351076;
+}
+
+.search-bar-group .btn-search:focus-visible {
+    outline: 2px solid #C7C9E0;
+    outline-offset: -3.5px;
 }
 
 /* ================= Filter Tabs & Season Select ================= */
@@ -69,6 +85,12 @@
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn:not(.active):hover {
+    background-color: #DBDEE8;
+    border-color: #5E6378;
 }
 
 .filter-tabs .tab-btn.active {
@@ -93,6 +115,16 @@
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+#season-select:hover {
+    border-color: #5E6378;
+}
+
+.tab-btn:focus-visible,
+#season-select:focus {
+    outline: 1px solid #5E6378;
 }
 
 /* ================= Search Results & Categories ================= */
@@ -112,7 +144,6 @@
 .category {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
     gap: 15px;
 }
 
@@ -140,6 +171,14 @@
 .info .header-info {
     font-size: 14px;
     font-weight: 600;
+    text-decoration: underline 1.5px transparent;
+    text-underline-offset: 2px;
+    color: #171A29;
+    transition: text-decoration-color 0.2s ease;
+}
+
+.info .header-info:hover {
+    text-decoration-color: currentColor;
 }
 
 .info .detail-info {

@@ -23,6 +23,7 @@
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .filter-tabs .tab-btn:not(.active):hover {
@@ -33,6 +34,10 @@
 .filter-tabs .tab-btn.active {
     background-color: #5C26B8;
     color: #FFFFFF;
+}
+
+.tab-btn:focus-visible {
+    outline: 2px solid #5E6378;
 }
 
 /* ================= Favorite Cards Grid ================= */
@@ -52,6 +57,7 @@
     border-radius: 10px;
 }
 
+/* ปุ่มไอคอนหัวใจมุมขวาบนของการ์ด */
 .fav-card .heart-icon {
     position: absolute;
     top: 15px;
