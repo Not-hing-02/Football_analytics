@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 
 import analyticsRouter from "./routes/analytics.mjs";
 import compareRouter from "./routes/compare.mjs";
+import compareTeamsRouter from "./routes/compare-teams.mjs";
 import playersRouter from "./routes/players.mjs";
 import teamsRouter from "./routes/teams.mjs";
 
@@ -24,6 +25,7 @@ app.use("/api/players", playersRouter);
 app.use("/api/teams", teamsRouter);
 app.use("/api/analytics", analyticsRouter);
 app.use("/api/compare", compareRouter);
+app.use("/api/compare/teams", compareTeamsRouter);
 
 app.listen(port, () => {
     console.log(`Open http://localhost:${port}/players.html`);

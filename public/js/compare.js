@@ -1,3 +1,4 @@
+export function initPlayerComparison() {
 const compareElement = (id) => document.getElementById(`compare-${id}`);
 const compareSeason = compareElement("season");
 const compareStatus = compareElement("status");
@@ -6,6 +7,7 @@ const compareResults = compareElement("results");
 const comparePicker = compareElement("picker");
 const compareSearch = compareElement("search");
 const changeButtons = [compareElement("change-a"), compareElement("change-b")];
+const teamFilters = [compareElement("filter-a"), compareElement("filter-b")];
 const numberFormat = new Intl.NumberFormat("en", { maximumFractionDigits: 2 });
 const positions = { GK: "Goalkeeper", DEF: "Defender", MID: "Midfielder", FWD: "Forward" };
 const metricDefinitions = [
@@ -28,6 +30,23 @@ let selected = [null, null];
 let activeSlot = 0;
 let pending;
 let retryAction;
+let seasons = [];
+
+// ตรวจทุกสโมสรที่เคยลงสนาม ไม่จำกัดเฉพาะทีมล่าสุดของผู้เล่นที่ย้ายทีม
+function matchesTeam(player, slot) {
+    return !teamFilters[slot].value || player.teams.some(
+        (team) => String(team.id) === teamFilters[slot].value);
+}
+
+function refreshTeamFilters() {
+    const teams = seasons.find(({ id }) => String(id) === compareSeason.value).teams;
+    teamFilters.forEach((filter) => {
+        const previous = filter.value;
+        filter.replaceChildren(new Option("All Teams", ""),
+            ...teams.map(({ id, name }) => new Option(name, id)));
+        if (teams.some(({ id }) => String(id) === previous)) filter.value = previous;
+    });
+}
 
 function compareNode(tag, className, text = "") {
     const item = document.createElement(tag);
@@ -61,7 +80,8 @@ async function compareJson(url, signal) {
 }
 
 function playerDetails(player) {
-    return [player.team, positions[player.position] ?? player.position].filter(Boolean).join(" · ");
+    return [player.teams.map(({ name }) => name).join(" / "),
+        positions[player.position] ?? player.position].filter(Boolean).join(" · ");
 }
 
 function renderCards(cards = selected) {
@@ -82,8 +102,8 @@ function searchable(value) {
 
 function renderPlayerOptions() {
     const query = searchable(compareSearch.value.trim());
-    const matches = players.filter((player) => searchable(
-        `${player.name} ${player.fullName} ${player.team}`
+    const matches = players.filter((player) => matchesTeam(player, activeSlot) && searchable(
+        `${player.name} ${player.fullName} ${player.teams.map(({ name }) => name).join(" ")}`
     ).includes(query));
     compareElement("picker-status").textContent = matches.length
         ? `${matches.length} players found`
@@ -190,6 +210,7 @@ async function loadComparison() {
 async function loadSeasonPlayers() {
     const signal = nextCompareRequest();
     changeButtons.forEach((button) => { button.disabled = true; });
+    teamFilters.forEach((filter) => { filter.disabled = true; });
     if (comparePicker.open) comparePicker.close();
     renderCards([null, null]);
     compareMessage("Loading players for this season…");
@@ -199,7 +220,9 @@ async function loadSeasonPlayers() {
         if (signal.aborted) return;
         players = data.players;
         // คงผู้เล่นที่ยังมีข้อมูลในฤดูกาลใหม่ และล้างเฉพาะฝั่งที่ต้องเลือกใหม่
-        selected = selected.map((previous) => players.find(({ id }) => id === previous?.id) ?? null);
+        selected = selected.map((previous, slot) => players.find(
+            (player) => player.id === previous?.id && matchesTeam(player, slot)) ?? null);
+        teamFilters.forEach((filter) => { filter.disabled = false; });
         renderCards();
         if (players.length < 2) {
             compareMessage(players.length ? "Only one player has recorded appearances for this season."
@@ -217,7 +240,7 @@ async function loadCompareSeasons() {
     const signal = nextCompareRequest();
     compareMessage("Loading seasons…");
     try {
-        const seasons = await compareJson("/api/analytics/filters", signal);
+        seasons = await compareJson("/api/analytics/filters", signal);
         if (signal.aborted) return;
         if (!seasons.length) {
             compareSeason.replaceChildren(new Option("No seasons available", ""));
@@ -226,14 +249,26 @@ async function loadCompareSeasons() {
         }
         compareSeason.replaceChildren(...seasons.map(({ id, label }) => new Option(label, id)));
         compareSeason.disabled = false;
+        refreshTeamFilters();
         await loadSeasonPlayers();
     } catch (error) {
         if (!signal.aborted) compareMessage(error.message, loadCompareSeasons);
     }
 }
 
-compareSeason.addEventListener("change", loadSeasonPlayers);
+compareSeason.addEventListener("change", () => {
+    refreshTeamFilters();
+    loadSeasonPlayers();
+});
+teamFilters.forEach((filter, slot) => filter.addEventListener("change", () => {
+    if (comparePicker.open) comparePicker.close();
+    if (selected[slot] && !matchesTeam(selected[slot], slot)) selected[slot] = null;
+    renderCards();
+    loadComparison();
+}));
 compareRetry.addEventListener("click", () => retryAction?.());
 compareSearch.addEventListener("input", renderPlayerOptions);
 changeButtons.forEach((button, slot) => button.addEventListener("click", () => openPlayerPicker(slot)));
 loadCompareSeasons();
+
+}
