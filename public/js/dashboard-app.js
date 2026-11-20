@@ -12,6 +12,7 @@ async function loadDashboardData(seasonId) {
     try {
         const response = await fetch(`/api/dashboard?season=${seasonId}`);
         const data = await response.json();
+        console.log(response)
 
         if (!data.success) {
             console.error("Failed to load dashboard:", data.message);
@@ -104,6 +105,8 @@ function renderFavoriteTeams(favoriteTeams) {
 
     if (!favContainer) return;
 
+    currentUser = true;
+
     // กรณีที่ 1: ผู้ใช้ยังไม่ได้เข้าสู่ระบบ
     if (!currentUser) {
         favState.classList.add("with-blur");
@@ -129,7 +132,7 @@ function renderFavoriteTeams(favoriteTeams) {
     favState.hidden = true;
     favContainer.hidden = false;
     favContainer.innerHTML = favoriteTeams.map((team) => `
-        <div class="team-col" onclick="window.location.href='/team-detail.html?id=${team.team_id}'" style="cursor: pointer;">
+        <div class="team-col">
             <img src="${team.logo_url || "assets/img.jpg"}" alt="${team.team_name}">
             <p class="team-name">${team.team_name}</p>
             <p class="overview-result">

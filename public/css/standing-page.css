@@ -35,6 +35,12 @@
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn:not(.active):hover {
+    background-color: #DBDEE8;
+    border-color: #5E6378;
 }
 
 .filter-tabs .tab-btn.active {
@@ -59,6 +65,16 @@
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+#season-select:hover {
+    border-color: #5E6378;
+}
+
+.tab-btn:focus-visible,
+#season-select:focus {
+    outline: 2px solid #5E6378;
 }
 
 /* ================= Table Meta Bar ================= */
@@ -128,7 +144,6 @@
 
 /* Table Body & Rows */
 .standings-table tbody tr {
-    position: relative;
     border-bottom: 1px solid #F1F3F7;
 }
 

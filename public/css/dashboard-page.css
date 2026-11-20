@@ -86,6 +86,12 @@
     text-decoration: none;
 }
 
+.panel-header .see-more:focus-visible {
+    outline: 1.5px solid #0E1129;
+    border-radius: 5px;
+    outline-offset: 3px;
+}
+
 /* Shared 35px Circular Avatars / Logos */
 .team-side img,
 .player-avatar,

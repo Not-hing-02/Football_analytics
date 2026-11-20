@@ -69,9 +69,9 @@
     padding: 0 16px;
 }
 
-/* Shared Sidebar Link Styles */
+/* Shared Sidebar Link & Logout Button Styles */
 .nav-links a,
-.bottom-nav a {
+.bottom-nav .btn-logout {
     display: flex;
     align-items: center;
     height: 40px;
@@ -80,18 +80,21 @@
     font-size: 13px;
     font-weight: 400;
     color: #C7C9E0;
-    text-decoration: none;
     transition: color 0.2s ease, background-color 0.2s ease;
 }
 
+.nav-links a {
+    text-decoration: none;
+}
+
 .nav-links a:hover,
-.bottom-nav a:hover {
+.bottom-nav .btn-logout:hover {
     color: #FFFFFF;
     background-color: #1C235D;
 }
 
 .nav-links a:focus-visible,
-.bottom-nav a:focus-visible {
+.bottom-nav .btn-logout:focus-visible {
     outline: 2px solid #C7C9E0;
 }
 
@@ -101,20 +104,19 @@
     font-weight: 600;
 }
 
-/* Logout Link Specifics */
-.bottom-nav a {
+/* Logout Button Specifics */
+.bottom-nav .btn-logout {
     gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
-.bottom-nav a:hover {
-    font-weight: 500;
-}
-
-.bottom-nav a img {
+.bottom-nav .btn-logout img {
     filter: invert(90%) sepia(6%) saturate(1694%) hue-rotate(195deg) brightness(93%) contrast(87%);
 }
 
-.bottom-nav a:hover img {
+.bottom-nav .btn-logout:hover img {
     filter: invert(100%) sepia(4%) saturate(17%) hue-rotate(192deg) brightness(104%) contrast(100%);
 }
 

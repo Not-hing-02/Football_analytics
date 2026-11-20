@@ -214,7 +214,7 @@ function renderTeamsCategory(teams) {
                 <div class="list-item team-row">
                     <img src="assets/img.jpg" alt="${team.team_name}">
                     <div class="info">
-                        <p class="header-info">${team.team_name} (${team.short_name})</p>
+                        <a href = "team.html?id=${team.team_id}" class="header-info">${team.team_name} (${team.short_name})</a>
                         <p class="detail-info">${team.home_stadium} · ${team.city}</p>
                     </div>
                 </div>
@@ -232,7 +232,7 @@ function renderPlayersCategory(players) {
                 <div class="list-item player-row">
                     <img src="assets/img.jpg" alt="${player.display_name}">
                     <div class="info">
-                        <p class="header-info">${player.display_name} (${player.player_name})</p>
+                        <a href = "player.html?id=${player.player_id}" class="header-info">${player.display_name} (${player.player_name})</a>
                         <p class="detail-info">${player.team_name} · ${player.position}</p>
                     </div>
                 </div>
@@ -259,7 +259,7 @@ function renderMatchesCategory(matches) {
                 return `
                     <div class="list-item matche-row">
                         <div class="info">
-                            <p class="header-info">${match.home_team_name} vs ${match.away_team_name} (${scoreOrStatus})</p>
+                            <a href = "match.html?id=${match.match_id}" class="header-info">${match.home_team_name} vs ${match.away_team_name} (${scoreOrStatus})</a>
                             <p class="detail-info">Season ${match.season_label} · MW ${match.matchweek} · ${dateStr}</p>
                         </div>
                     </div>
