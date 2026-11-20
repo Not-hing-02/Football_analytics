@@ -334,7 +334,5 @@ body #team-favorites:focus-visible {
     body #team-favorites {
         transition: none;
     }
-    flex: 1;
-    margin-top: 6px;
-    padding: 0 30px;
+
 }

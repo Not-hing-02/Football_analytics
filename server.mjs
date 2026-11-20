@@ -6,6 +6,11 @@ import teamsRouter from "./routes/teams.mjs";
 import matchesRouter from "./routes/matches.mjs";
 import analyticsRouter from "./routes/analytics.mjs";
 import compareRouter from "./routes/compare.mjs";
+import favoritesRouter from "./routes/favorites.mjs";
+import dashboardRouter from "./src/server-dashboard.js";
+import myfavRouter from "./src/server-myfav.js";
+import searchRouter from "./src/server-search.js";
+import standingRouter from "./src/server-standing.js";
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
@@ -22,6 +27,8 @@ app.use("/api/teams", teamsRouter);
 app.use("/api/matches", matchesRouter);
 app.use("/api/analytics", analyticsRouter);
 app.use("/api/compare", compareRouter);
+app.use("/api/favorites", favoritesRouter);
+app.use("/api", dashboardRouter, myfavRouter, searchRouter, standingRouter);
 
 app.listen(port, () => {
     console.log(`Open http://localhost:${port}/players.html`);

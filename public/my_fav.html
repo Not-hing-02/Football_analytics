@@ -64,12 +64,42 @@
                 </div>
             </header>
 
+            <!-- Main Content -->
             <main class="main">
-                <!-- content -->
+                <div class="main-content">
+                    <!-- Category Filter Tabs -->
+                    <div class="filter-tabs">
+                        <button type="button" class="tab-btn active" data-filter="teams">Favorite Teams</button>
+                        <button type="button" class="tab-btn" data-filter="players">Favorite Players</button>
+                    </div>
+
+                    <!-- Favorites Grid (จะถูกแทนที่ด้วยข้อมูลจริงจาก JS) -->
+                    <div class="fav-content">
+                        <div class="fav-card team">
+                            <svg class="heart-icon" width="50" height="50" viewBox="0 0 24 24" fill="red" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            <img class="fav-photo" src="assets/img.jpg" alt="fav-photo">
+                            <div class="info team">
+                                <p class="team-name">Nottingham Forest</p>
+                                <p class="stadium">Stadium</p>
+                            </div>
+                        </div>
+
+                        <div class="fav-card player" hidden>
+                            <svg class="heart-icon" width="50" height="50" viewBox="0 0 24 24" fill="red" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            <img class="fav-photo" src="assets/img.jpg" alt="fav-photo">
+                            <div class="info player">
+                                <p class="player-name">Mohamed Salah</p>
+                                <p class="player-detail">Liverpool • Forward</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </main>
-        
         </div>
-        
     </div>
 </body>
 </html>
