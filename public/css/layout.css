@@ -338,3 +338,18 @@ body #team-favorites:focus-visible {
     }
 
 }
+.club-logo {
+    vertical-align: middle;
+}
+
+.fav-card .fav-photo.club-logo {
+    object-fit: contain;
+}
+
+.club-logo[hidden] {
+    display: none;
+}
+
+td > .club-logo {
+    margin-inline-end: 8px;
+}

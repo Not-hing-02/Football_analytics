@@ -254,3 +254,12 @@
         max-width: none;
     }
 }
+
+.team-badge.has-crest,
+.team-card:nth-child(even) .team-badge.has-crest {
+    background: transparent;
+}
+
+.team-badge img {
+    object-fit: contain;
+}

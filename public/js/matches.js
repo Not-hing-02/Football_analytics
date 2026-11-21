@@ -72,7 +72,7 @@ function createMatchRow(match) {
     const row = document.createElement("tr");
 
     row.insertCell().textContent = formatDate(match);
-    row.insertCell().textContent = match.home_team;
+    row.insertCell().append(createTeamLogo(match.home_id), match.home_team);
 
     const score = document.createElement("span");
     score.className = "match-score";
@@ -81,7 +81,7 @@ function createMatchRow(match) {
         : `${match.home_goals ?? "—"} – ${match.away_goals ?? "—"}`;
 
     row.insertCell().append(score);
-    row.insertCell().textContent = match.away_team;
+    row.insertCell().append(createTeamLogo(match.away_id), match.away_team);
 
     const status = document.createElement("span");
     status.className = `match-status ${match.status}`;

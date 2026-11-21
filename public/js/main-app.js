@@ -211,3 +211,31 @@ document.addEventListener("click", (event) => {
     event.preventDefault();
     toggleFavorite(button.dataset.favType, button.dataset.favId, button);
 });
+
+function createTeamLogo(teamId, showPlaceholder = false, extraClass = "") {
+    const logo = document.createElement("img");
+    logo.className = extraClass ? `club-logo ${extraClass}` : "club-logo";
+    logo.alt = "";
+    logo.width = 28;
+    logo.height = 28;
+    logo.dataset.missingLogo = showPlaceholder ? "placeholder" : "hide";
+    const id = Number(teamId);
+    if (Number.isSafeInteger(id) && id > 0) {
+        logo.setAttribute("src", `/assets/Logo_Teams/${id}.png`);
+    } else if (showPlaceholder) {
+        logo.setAttribute("src", "/assets/img.jpg");
+    } else {
+        logo.hidden = true;
+    }
+    return logo;
+}
+
+document.addEventListener("error", (event) => {
+    const logo = event.target;
+    if (!(logo instanceof HTMLImageElement) || !logo.dataset.missingLogo) return;
+    if (logo.dataset.missingLogo === "placeholder" && logo.getAttribute("src") !== "/assets/img.jpg") {
+        logo.src = "/assets/img.jpg";
+        return;
+    }
+    logo.hidden = true;
+}, true);

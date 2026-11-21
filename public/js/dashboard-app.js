@@ -64,14 +64,14 @@ function renderRecentMatches(matches) {
     matchesContainer.innerHTML = matches.map((match) => `
         <div class="match-row">
             <div class="match-item team-side home">
-                <img src="assets/img.jpg" alt="${match.home_team_name}">
+                ${createTeamLogo(match.home_team_id, true).outerHTML}
                 <span>${match.home_team_name}</span>
             </div>
             <div class="match-item match-score">
                 <span>${match.home_goals}-${match.away_goals}</span>
             </div>
             <div class="match-item team-side away">
-                <img src="assets/img.jpg" alt="${match.away_team_name}">
+                ${createTeamLogo(match.away_team_id, true).outerHTML}
                 <span>${match.away_team_name}</span>
             </div>
         </div>
@@ -116,7 +116,7 @@ function renderFavoriteTeams(favoriteTeams, favoritePlayers) {
     favContainer.hidden = false;
     favContainer.innerHTML = favoriteTeams.map((team) => `
         <div class="team-col">
-            <img src="${team.logo_url || "assets/img.jpg"}" alt="${team.team_name}">
+            ${createTeamLogo(team.team_id, true).outerHTML}
             <p class="team-name">${team.team_name}</p>
             <p class="overview-result">
                 <span class="win">W${team.wins}</span>

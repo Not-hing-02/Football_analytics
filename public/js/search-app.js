@@ -212,7 +212,7 @@ function renderTeamsCategory(teams) {
             <h4>Teams</h4>
             ${teams.map((team) => `
                 <div class="list-item team-row">
-                    <img src="assets/img.jpg" alt="${team.team_name}">
+                    ${createTeamLogo(team.team_id, true).outerHTML}
                     <div class="info">
                         <a href = "team.html?id=${team.team_id}" class="header-info">${team.team_name} (${team.short_name})</a>
                         <p class="detail-info">${team.home_stadium} · ${team.city}</p>

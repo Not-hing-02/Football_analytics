@@ -133,6 +133,7 @@ function renderStandingsTable(data) {
                 <td class="col-pos">${rank}</td>
                 <td class="col-team">
                     <div class="team-info">
+                        ${createTeamLogo(team.team_id).outerHTML}
                         <span class="team-name">${team.team_name}</span>
                         ${championBadge}
                     </div>

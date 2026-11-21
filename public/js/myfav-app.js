@@ -77,7 +77,7 @@ function renderFavoriteTeams(teams) {
             <button type="button" class="favorite-remove" aria-label="Remove favorite team" data-fav-type="teams" data-fav-id="${team.team_id}">
                 ${HEART_ICON_SVG}
             </button>
-            <img class="fav-photo" src="assets/img.jpg" alt="${team.team_name}">
+            ${createTeamLogo(team.team_id, true, "fav-photo").outerHTML}
             <div class="info team">
                 <p class="team-name">${team.team_name}</p>
                 <p class="stadium">${team.home_stadium}</p>

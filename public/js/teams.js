@@ -56,8 +56,24 @@ function openTeamDetails(team) {
 function createTeamCard(team) {
     const card = cardTemplate.content.firstElementChild.cloneNode(true);
 
-    card.querySelector(".team-badge").textContent =
-        team.abbreviation || team.name.slice(0, 3).toUpperCase();
+    const badge = card.querySelector(".team-badge");
+    badge.textContent = team.abbreviation || team.name.slice(0, 3).toUpperCase();
+
+    const teamId = Number(team.id);
+
+    if (Number.isSafeInteger(teamId) && teamId > 0) {
+        const crest = document.createElement("img");
+        crest.alt = "";
+        crest.width = 36;
+        crest.height = 36;
+
+        crest.addEventListener("load", () => {
+            badge.replaceChildren(crest);
+            badge.classList.add("has-crest");
+        }, { once: true });
+
+        crest.src = `/assets/Logo_Teams/${teamId}.png`;
+    }
     card.querySelector(".team-name").textContent = team.name;
     card.querySelector(".team-stadium").textContent = team.stadium || "—";
 
