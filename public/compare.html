@@ -7,14 +7,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/my-fav-page.css">
+    <link rel="stylesheet" href="css/compare.css">
+    <link rel="stylesheet" href="css/compare-teams.css">
+    <link rel="stylesheet" href="css/compare-page.css">
+    <script type="module" src="js/compare-page.js"></script>
     <script src="js/main-app.js" defer></script>
-    <script src="js/myfav-app.js" defer></script>
-    <title>Premier League</title>
+    <title>Compare · Premier League</title>
 </head>
-<body>
+<body class="compare-page">
+
     <div class="container">
-        <!-- Sidebar Navigation -->
         <nav class="navigator">
             <div class="top-nav">
                 <div class="brand">
@@ -33,14 +35,13 @@
                 </ul>
             </div>
             <div class="bottom-nav" hidden>
-                <a href="#" class="btn-logout">
+                <button type="button" class="btn-logout">
                     <img src="assets/logout.svg" alt="icon-logout">
                     Log out
-                </a>
+                </button>
             </div>
         </nav>
 
-        <!-- Content Area -->
         <div class="content-wrapper">
             <header class="header">
                 <div class="left-header">
@@ -63,13 +64,110 @@
                     <a href="login.html" id="btn-login">Log in</a>
                 </div>
             </header>
+            <main class="main compare-main">
+<div class="compare-intro">
+                    <h2>Compare</h2>
+                    <p>Explore season statistics side by side. Choose teams or players to compare.</p>
+                </div>
+                <div class="compare-tabs" role="tablist" aria-label="Comparison mode">
+                    <button type="button" id="tab-teams" role="tab" aria-selected="true" aria-controls="panel-teams">
+                        <svg data-lucide="users-round" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M18 21a8 8 0 0 0-16 0"/><circle cx="10" cy="8" r="5"/><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"/>
+                        </svg>
+                        <span>Compare Teams</span>
+                    </button>
+                    <button type="button" id="tab-players" role="tab" aria-selected="false" aria-controls="panel-players" tabindex="-1">
+                        <svg data-lucide="user-round" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>
+                        </svg>
+                        <span>Compare Players</span>
+                    </button>
+                </div>
+                <div id="panel-teams" role="tabpanel" aria-labelledby="tab-teams" tabindex="0">
+                <div class="compare-toolbar">
+                    <label for="team-compare-season">Season</label>
+                    <select id="team-compare-season" disabled><option value="">Loading seasons…</option></select>
+                </div>
+                <div class="compare-cards">
+                    <section class="compare-card compare-left" aria-labelledby="team-name-a">
+                        <div class="compare-player">
+                            <h3 id="team-name-a">Team A</h3>
+                            <label for="team-select-a">Team A</label>
+                            <select id="team-select-a" disabled><option value="">Choose a team</option></select>
+                        </div>
+                    </section>
+                    <span class="compare-versus" aria-hidden="true">VS</span>
+                    <section class="compare-card compare-right" aria-labelledby="team-name-b">
+                        <div class="compare-player">
+                            <h3 id="team-name-b">Team B</h3>
+                            <label for="team-select-b">Team B</label>
+                            <select id="team-select-b" disabled><option value="">Choose a team</option></select>
+                        </div>
+                    </section>
+                </div>
+                <p id="team-compare-status" class="compare-note" role="status">Loading seasons…</p>
+                <button id="team-compare-retry" type="button" hidden>Try again</button>
+                <noscript><p>Enable JavaScript to compare teams.</p></noscript>
+                <section id="team-compare-results" aria-label="Team comparison" hidden>
+                    <p class="compare-note">Completed matches with both final scores only. Negative goal difference bars extend left of the center line. Losses and Goals Against are lower-is-better metrics.</p>
+                    <div id="team-compare-metrics"></div>
+                    <p id="team-compare-coverage" class="compare-note"></p>
+                </section>
 
-            <main class="main">
-                <!-- content -->
+                </div>
+                <div id="panel-players" role="tabpanel" aria-labelledby="tab-players" tabindex="0" hidden>
+                <div class="compare-toolbar">
+                    <label for="compare-season">Season</label>
+                    <select id="compare-season" disabled><option>Loading seasons…</option></select>
+                </div>
+                <div class="compare-cards">
+                    <section class="compare-card compare-left" aria-labelledby="compare-name-a">
+                        <span id="compare-avatar-a" class="compare-avatar" aria-hidden="true">A</span>
+                        <div class="compare-player">
+                            <label for="compare-filter-a">Team A</label>
+                            <select id="compare-filter-a" disabled><option value="">All Teams</option></select>
+                            <h3 id="compare-name-a">Player A</h3>
+                            <p id="compare-team-a">Choose a player</p>
+                            <button type="button" id="compare-change-a" aria-label="Change Player A" aria-haspopup="dialog" disabled>Change Player</button>
+                        </div>
+                    </section>
+                    <span class="compare-versus" aria-hidden="true">VS</span>
+                    <section class="compare-card compare-right" aria-labelledby="compare-name-b">
+                        <span id="compare-avatar-b" class="compare-avatar" aria-hidden="true">B</span>
+                        <div class="compare-player">
+                            <label for="compare-filter-b">Team B</label>
+                            <select id="compare-filter-b" disabled><option value="">All Teams</option></select>
+                            <h3 id="compare-name-b">Player B</h3>
+                            <p id="compare-team-b">Choose a player</p>
+                            <button type="button" id="compare-change-b" aria-label="Change Player B" aria-haspopup="dialog" disabled>Change Player</button>
+                        </div>
+                    </section>
+                </div>
+                <p id="compare-status" role="status">Loading seasons…</p>
+                <button id="compare-retry" type="button" hidden>Try again</button>
+                <noscript><p>Enable JavaScript to compare players.</p></noscript>
+                <section id="compare-results" aria-label="Player comparison" hidden>
+                    <p class="compare-note">Team filters select players. Stats cover all their recorded appearances across clubs in the selected season, in completed matches. Assists use the FPL definition.</p>
+                    <div id="compare-metrics"></div>
+                    <div id="compare-notes" class="compare-note" hidden></div>
+                </section>
+                <!-- ใช้กล่องเลือกผู้เล่นร่วมกันทั้งสองฝั่ง เพื่อให้พฤติกรรมการค้นหาเหมือนกัน -->
+                <dialog id="compare-picker" aria-labelledby="compare-picker-title">
+                    <div class="compare-picker-header">
+                        <h3 id="compare-picker-title">Choose a player</h3>
+                        <form method="dialog"><button type="submit">Close</button></form>
+                    </div>
+                    <label for="compare-search">Search by player name or club</label>
+                    <input id="compare-search" type="search" autocomplete="off" autofocus>
+                    <p id="compare-picker-status" role="status"></p>
+                    <ul id="compare-options"></ul>
+                </dialog>
+
+                </div>
             </main>
-        
+
         </div>
-        
+
     </div>
 </body>
 </html>

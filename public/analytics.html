@@ -7,14 +7,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/my-fav-page.css">
+    <link rel="stylesheet" href="css/analytics.css">
     <script src="js/main-app.js" defer></script>
-    <script src="js/myfav-app.js" defer></script>
-    <title>Premier League</title>
+    <script src="js/analytics.js" defer></script>
+    <title>Analytics · Premier League</title>
 </head>
-<body>
+<body class="analytics-page">
+
     <div class="container">
-        <!-- Sidebar Navigation -->
         <nav class="navigator">
             <div class="top-nav">
                 <div class="brand">
@@ -26,25 +26,24 @@
                     <li><a href="teams.html">Teams</a></li>
                     <li><a href="players.html">Players</a></li>
                     <li><a href="matches.html">Matches</a></li>
-                    <li><a href="analytics.html" class="active">Analytics</a></li>
+                    <li><a href="analytics.html" class="active" aria-current="page">Analytics</a></li>
                     <li><a href="compare.html">Compare</a></li>
                     <li><a href="standing.html">Standing</a></li>
                     <li><a href="my_fav.html">My Favorites</a></li>
                 </ul>
             </div>
             <div class="bottom-nav" hidden>
-                <a href="#" class="btn-logout">
+                <button type="button" class="btn-logout">
                     <img src="assets/logout.svg" alt="icon-logout">
                     Log out
-                </a>
+                </button>
             </div>
         </nav>
 
-        <!-- Content Area -->
         <div class="content-wrapper">
             <header class="header">
                 <div class="left-header">
-                    <h1>Analytics</h1>
+                    <h2>Analytics</h2>
                 </div>
 
                 <div class="right-header">
@@ -63,9 +62,43 @@
                     <a href="login.html" id="btn-login">Log in</a>
                 </div>
             </header>
-
-            <main class="main">
-                <!-- content -->
+            <main class="main analytics-main">
+                <div class="analytics-toolbar">
+                    <select id="analytics-team" aria-label="Team" disabled>
+                        <option value="">All Teams</option>
+                    </select>
+                    <select id="analytics-season" aria-label="Season" disabled>
+                        <option value="">Season</option>
+                    </select>
+                    <button id="analytics-export" type="button" disabled>Export Report</button>
+                </div>
+                <p id="analytics-status" class="analytics-notice" role="status">Loading analytics…</p>
+                <button id="analytics-retry" type="button" hidden>Try again</button>
+                <noscript><p class="analytics-notice">Enable JavaScript to load analytics and export reports.</p></noscript>
+                <!-- รอให้ API ส่งข้อมูลก่อนแสดงกราฟ เพื่อไม่ให้พื้นที่ว่างถูกเข้าใจว่าไม่มีผลการแข่งขัน -->
+                <div id="analytics-results" class="analytics-grid" hidden>
+                    <section class="analytics-card" aria-labelledby="outcomes-heading">
+                        <h3 id="outcomes-heading">Win / Draw / Loss</h3>
+                        <p id="analytics-outcome-caption" class="analytics-caption"></p>
+                        <div id="analytics-outcomes"></div>
+                    </section>
+                    <section class="analytics-card" aria-labelledby="goals-heading">
+                        <h3 id="goals-heading">Goals per Match</h3>
+                        <p id="analytics-goals-caption" class="analytics-caption"></p>
+                        <div id="analytics-goals"></div>
+                    </section>
+                    <section class="analytics-card" aria-labelledby="scorers-heading">
+                        <h3 id="scorers-heading">Top Scorers</h3>
+                        <p class="analytics-caption">Goals in the selected season and scope</p>
+                        <ol id="analytics-scorers"></ol>
+                        <p id="analytics-no-scorers" class="analytics-notice" hidden>No recorded scorers.</p>
+                    </section>
+                    <section class="analytics-card analytics-trend" aria-labelledby="trend-heading">
+                        <h3 id="trend-heading">Team Performance Trend</h3>
+                        <p id="analytics-trend-caption" class="analytics-caption"></p>
+                        <div id="analytics-trend"></div>
+                    </section>
+                </div>
             </main>
         
         </div>

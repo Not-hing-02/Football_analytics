@@ -1,0 +1,53 @@
+.compare-intro {
+    text-align: center;
+    margin: 0 auto 26px;
+}
+
+.compare-intro h2 { font-size: 28px; }
+.compare-intro p { margin-top: 10px; color: #566078; font-size: 14px; line-height: 1.6; }
+
+.compare-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    max-width: 640px;
+    margin: 0 auto 30px;
+    padding: 7px;
+    border: 1px solid #e1dcec;
+    border-radius: 14px;
+    background: #edeaf4;
+}
+
+.compare-tabs [role="tab"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 18px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: #566078;
+    background: transparent;
+    font-weight: 600;
+    transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.compare-tabs [aria-selected="true"] {
+    background: #faf7ff;
+    color: #5d25c4;
+    border-color: #cfc0ec;
+    box-shadow: 0 2px 6px #2113430a;
+}
+
+.compare-tabs svg { flex-shrink: 0; }
+#panel-players .compare-player { width: auto; }
+#panel-players .compare-player h3 { margin-bottom: 0; }
+
+@media (max-width: 560px) {
+    .compare-tabs [role="tab"] { flex-direction: column; gap: 8px; padding: 12px 7px; }
+    .compare-intro h2 { font-size: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .compare-tabs [role="tab"] { transition: none; }
+}

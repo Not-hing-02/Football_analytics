@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/my-fav-page.css">
     <script src="js/main-app.js" defer></script>
-    <script src="js/myfav-app.js" defer></script>
+    <link rel="stylesheet" href="css/matches.css">
+    <script src="js/matches.js" defer></script>
     <title>Premier League</title>
 </head>
+
 <body>
+
     <div class="container">
-        <!-- Sidebar Navigation -->
         <nav class="navigator">
             <div class="top-nav">
                 <div class="brand">
@@ -33,14 +37,13 @@
                 </ul>
             </div>
             <div class="bottom-nav" hidden>
-                <a href="#" class="btn-logout">
+                <button type="button" class="btn-logout">
                     <img src="assets/logout.svg" alt="icon-logout">
                     Log out
-                </a>
+                </button>
             </div>
         </nav>
 
-        <!-- Content Area -->
         <div class="content-wrapper">
             <header class="header">
                 <div class="left-header">
@@ -63,13 +66,83 @@
                     <a href="login.html" id="btn-login">Log in</a>
                 </div>
             </header>
+            <main class="main matches-page">
+                <div class="match-filters">
+                    <input id="match-search" type="search" placeholder="Search matches..." aria-label="Search matches">
 
-            <main class="main">
-                <!-- content -->
+                    <select id="match-season" aria-label="Season"></select>
+
+                    <select id="match-team" aria-label="Team">
+                        <option value="">All teams</option>
+                    </select>
+
+                    <div class="match-tabs" role="group" aria-label="เลือกประเภทแมตช์">
+                        <input type="hidden" id="match-status" value="">
+
+                        <button type="button" data-status="" aria-pressed="true">
+                            All
+                        </button>
+
+                        <button type="button" data-status="scheduled" aria-pressed="false">
+                            Upcoming
+                        </button>
+
+                        <button type="button" data-status="completed" aria-pressed="false">
+                            Completed
+                        </button>
+                    </div>
+                </div>
+
+                <p id="match-message" role="status">กำลังโหลดแมตช์...</p>
+                <button id="match-retry" type="button" hidden>ลองอีกครั้ง</button>
+
+                <div class="matches-scroll">
+                    <table class="matches-table">
+                        
+                        <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Home team</th>
+                                <th scope="col">Score</th>
+                                <th scope="col">Away team</th>
+                                <th scope="col">status</th>
+                                <th scope="col">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="match-rows"></tbody>
+                    </table>
+                </div>
+
+                <nav class="match-pagination" aria-label="Match pages">
+                    <button id="match-prev" type="button" disabled>Previous</button>
+                    <span id="match-page" aria-live="polite"></span>
+                    <button id="match-next" type="button" disabled>Next</button>
+                </nav>
+
+                <dialog id="match-dialog" aria-labelledby="match-detail-title">
+                    <h2 id="match-detail-title"></h2>
+                    <p id="match-detail-info"></p>
+
+                    <table class="match-stats">
+                        <thead>
+                            <tr>
+                                <th scope="col">Home team</th>
+                                <th scope="col">Statistics</th>
+                                <th scope="col">Away team</th>
+                            </tr>
+                        </thead>
+                        <tbody id="match-detail-stats"></tbody>
+                    </table>
+
+                    <form method="dialog">
+                        <button type="submit">Close</button>
+                    </form>
+                </dialog>
             </main>
-        
+
         </div>
-        
+
     </div>
 </body>
+
 </html>

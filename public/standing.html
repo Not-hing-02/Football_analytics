@@ -7,9 +7,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/my-fav-page.css">
+    <link rel="stylesheet" href="css/standing-page.css">
     <script src="js/main-app.js" defer></script>
-    <script src="js/myfav-app.js" defer></script>
+    <script src="js/standing-app.js" defer></script>
     <title>Premier League</title>
 </head>
 <body>
@@ -33,10 +33,10 @@
                 </ul>
             </div>
             <div class="bottom-nav" hidden>
-                <a href="#" class="btn-logout">
+                <button type="button" class="btn-logout">
                     <img src="assets/logout.svg" alt="icon-logout">
                     Log out
-                </a>
+                </button>
             </div>
         </nav>
 
@@ -64,12 +64,124 @@
                 </div>
             </header>
 
+            <!-- Main Content -->
             <main class="main">
-                <!-- content -->
+                <!-- Filter Tabs & Season Selector -->
+                <div class="filter-bar">
+                    <div class="filter-tabs" role="tablist">
+                        <button type="button" class="tab-btn active" data-filter="all">Overview</button>
+                        <button type="button" class="tab-btn" data-filter="home">Home</button>
+                        <button type="button" class="tab-btn" data-filter="away">Away</button>
+                    </div>
+
+                    <div class="season-filter">
+                        <label for="season-select">Season</label>
+                        <select id="season-select" name="season">
+                            <option value="2026">2026/27</option>
+                            <option value="2025">2025/26</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Summary Meta Bar -->
+                <div class="table-meta-bar">
+                    <span class="team-count">20 teams</span>
+                    <span class="season-status">Season complete · 38 matches per team</span>
+                </div>
+
+                <!-- Sentinel สำหรับตรวจจับจุดเริ่มต้น Sticky Header -->
+                <div class="table-sentinel"></div>
+
+                <!-- Standings Table -->
+                <div class="table-card">
+                    <table class="standings-table">
+                        <thead>
+                            <tr>
+                                <th class="col-pos">POS</th>
+                                <th class="col-team">TEAM</th>
+                                <th class="col-played">P</th>
+                                <th class="col-won">W</th>
+                                <th class="col-drawn">D</th>
+                                <th class="col-lost">L</th>
+                                <th class="col-gf">GF</th>
+                                <th class="col-ga">GA</th>
+                                <th class="col-gd">GD</th>
+                                <th class="col-pts">PTS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="standings-list">
+                            <!-- แถวตัวอย่างเริ่มต้น (จะถูกแทนที่ด้วยข้อมูลจาก JS) -->
+                            <tr class="zone-ucl is-champion">
+                                <td class="col-pos">1</td>
+                                <td class="col-team">
+                                    <div class="team-info">
+                                        <span class="team-name">Liverpool</span>
+                                        <span class="badge badge-champion">CHAMPIONS</span>
+                                    </div>
+                                </td>
+                                <td class="col-played">38</td>
+                                <td class="col-won">25</td>
+                                <td class="col-drawn">9</td>
+                                <td class="col-lost">4</td>
+                                <td class="col-gf">86</td>
+                                <td class="col-ga">41</td>
+                                <td class="col-gd">+45</td>
+                                <td class="col-pts">84</td>
+                            </tr>
+                            <tr class="zone-ucl">
+                                <td class="col-pos">2</td>
+                                <td class="col-team">
+                                    <div class="team-info">
+                                        <span class="team-name">Arsenal</span>
+                                    </div>
+                                </td>
+                                <td class="col-played">38</td>
+                                <td class="col-won">20</td>
+                                <td class="col-drawn">14</td>
+                                <td class="col-lost">4</td>
+                                <td class="col-gf">69</td>
+                                <td class="col-ga">34</td>
+                                <td class="col-gd">+35</td>
+                                <td class="col-pts">74</td>
+                            </tr>
+                            <tr class="zone-relegation">
+                                <td class="col-pos">18</td>
+                                <td class="col-team">
+                                    <div class="team-info">
+                                        <span class="team-name">Leicester City</span>
+                                    </div>
+                                </td>
+                                <td class="col-played">38</td>
+                                <td class="col-won">6</td>
+                                <td class="col-drawn">7</td>
+                                <td class="col-lost">25</td>
+                                <td class="col-gf">33</td>
+                                <td class="col-ga">80</td>
+                                <td class="col-gd">-47</td>
+                                <td class="col-pts">25</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Table Footer & Legend -->
+                <footer class="table-footer">
+                    <div class="legend-group">
+                        <div class="legend-item">
+                            <span class="legend-indicator indicator-ucl"></span>
+                            <span>Champions League (top 5)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-indicator indicator-relegation"></span>
+                            <span>Relegation</span>
+                        </div>
+                    </div>
+                    <div class="table-notes">
+                        <span class="abbreviations">P: Played &nbsp; W: Won &nbsp; D: Drawn &nbsp; L: Lost &nbsp; GD: Goal difference</span>
+                    </div>
+                </footer>
             </main>
-        
         </div>
-        
     </div>
 </body>
 </html>

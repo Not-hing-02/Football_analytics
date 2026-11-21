@@ -1,0 +1,25 @@
+.compare-toolbar { flex-wrap: wrap; }
+.compare-card .compare-player { width: 100%; }
+.compare-player h3 { margin-bottom: 14px; }
+
+/* เส้นศูนย์ช่วยแยกผลต่างประตูติดลบออกจากค่าศูนย์และค่าบวก */
+.team-signed-track {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    height: 10px;
+    border-radius: 4px;
+    background: #e7e9f2;
+}
+
+.team-signed-track::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -4px;
+    bottom: -4px;
+    width: 1px;
+    background: #68718b;
+}
+
+.team-signed-track .compare-fill { position: absolute; }
