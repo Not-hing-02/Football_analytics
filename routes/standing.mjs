@@ -7,7 +7,14 @@ const router = express.Router();
 // SQL Queries
 // ==========================================
 
-// ตรวจสอบสถานะของฤดูกาล (จำนวนแมตช์ที่แข่งแล้ว / รอแข่ง และสัปดาห์ล่าสุด)
+// 0. ดึงรายการฤดูกาลทั้งหมดจากฐานข้อมูล (เรียงจากปีล่าสุดลงไป)
+const SEASONS_QUERY = `
+    SELECT season_id, label
+    FROM pl_history.seasons
+    ORDER BY season_id DESC
+`;
+
+// 1. ตรวจสอบสถานะของฤดูกาล (จำนวนแมตช์ที่แข่งแล้ว / รอแข่ง และสัปดาห์ล่าสุด)
 const SEASON_STATUS_QUERY = `
     SELECT
         s.label AS season_label,
@@ -20,7 +27,7 @@ const SEASON_STATUS_QUERY = `
     GROUP BY s.season_id, s.label
 `;
 
-// คำนวณตารางคะแนนจากแมตช์ที่แข่งจบแล้ว (completed) ตามตัวกรอง all / home / away
+// 2. คำนวณตารางคะแนนจากแมตช์ที่แข่งจบแล้ว (completed) ตามตัวกรอง all / home / away
 const STANDINGS_QUERY = `
     WITH team_matches AS (
         -- ผลการแข่งขันเกมเหย้า
@@ -71,15 +78,34 @@ const STANDINGS_QUERY = `
     ORDER BY pts DESC, gd DESC, gf DESC, t.team_name ASC
 `;
 
+const ALLOWED_FILTERS = new Set(["all", "home", "away"]);
+
 // ==========================================
 // Route Handler: GET /api/standing
 // Query Params: ?season=2026&filter=all (all | home | away)
 // ==========================================
 router.get("/standing", async (req, res) => {
-    const seasonId = parseInt(req.query.season, 10) || 2026;
-    const filter = req.query.filter || "all";
+    const filter = ALLOWED_FILTERS.has(req.query.filter) ? req.query.filter : "all";
 
     try {
+        // ดึงรายการฤดูกาลทั้งหมดจาก Database ก่อน
+        const seasonsRes = await pool.query(SEASONS_QUERY);
+        const seasons = seasonsRes.rows;
+
+        if (seasons.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No seasons found in database."
+            });
+        }
+
+        // ถ้าไม่ได้ส่ง ?season= มา หรือส่งค่าที่ไม่มีใน DB ให้ใช้ฤดูกาลล่าสุดจาก DB เป็นค่าเริ่มต้น
+        const validSeasonIds = new Set(seasons.map((s) => Number(s.season_id)));
+        const requestedSeasonId = Number(req.query.season);
+        const seasonId = validSeasonIds.has(requestedSeasonId)
+            ? requestedSeasonId
+            : Number(seasons[0].season_id);
+
         // ดึงสถานะฤดูกาลและตารางคะแนนพร้อมกัน
         const [statusRes, standingsRes] = await Promise.all([
             pool.query(SEASON_STATUS_QUERY, [seasonId]),
@@ -99,6 +125,7 @@ router.get("/standing", async (req, res) => {
 
         res.json({
             success: true,
+            seasons,
             season_id: seasonId,
             season_label: seasonInfo.season_label,
             is_completed: isCompletedSeason,

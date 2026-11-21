@@ -2,7 +2,8 @@
 // 1. เริ่มต้นการทำงานเมื่อโหลดหน้าเว็บ
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-    Promise.resolve(authReady).then(() => loadDashboardData(2026)); // ดึงข้อมูลฤดูกาล 2026/27
+    // รอให้เช็กสถานะ Login เสร็จก่อน ค่อยโหลดข้อมูล Dashboard (เพื่อดึงทีมโปรดของผู้ใช้)
+    Promise.resolve(authReady).then(() => loadDashboardData(2026));
 });
 
 // ==========================================
@@ -12,21 +13,18 @@ async function loadDashboardData(seasonId) {
     try {
         const response = await fetch(`/api/dashboard?season=${seasonId}`);
         const data = await response.json();
-        console.log(response)
 
         if (!data.success) {
             console.error("Failed to load dashboard:", data.message);
             return;
         }
 
-        console.log("Data from DB:", data);
-
         // อัปเดต UI ในแต่ละส่วนของหน้า Dashboard
         renderSeasonBadge(data.season_label, data.season_id);
         renderKpis(data.kpis);
         renderRecentMatches(data.recent_matches);
         renderTopScorers(data.top_scorers);
-        renderFavoriteTeams(data.favorite_teams, data.favorite_players);
+        renderFavoriteTeams(data.favorite_teams);
     } catch (error) {
         console.error("Error connecting to API:", error);
     }
@@ -97,25 +95,62 @@ function renderTopScorers(scorers) {
     `).join("");
 }
 
-// แสดงส่วนทีมโปรด (รองรับ 3 สถานะ: ยังไม่ล็อกอิน / ไม่มีทีมโปรด / มีทีมโปรด)
-function renderFavoriteTeams(favoriteTeams, favoritePlayers) {
+// แสดงส่วนทีมโปรด (รองรับทั้ง 3 สถานะ: ยังไม่ล็อกอิน / ไม่มีทีมโปรด / มีทีมโปรด)
+function renderFavoriteTeams(favoriteTeams) {
+    const favSection = document.getElementById("dashboard-favorites");
     const favContainer = document.getElementById("favorite-teams-list");
     const favState = document.getElementById("fav-state");
     const seeMoreBtn = document.querySelector(".favorite-teams .see-more");
+    const loginOverlay = document.querySelector(".favorites-login-overlay, #fav-login-overlay");
 
     if (!favContainer) return;
 
-    if (favoriteTeams.length === 0 && favoritePlayers.length === 0) {
-        favState.hidden = false;
+    // 1. กรณียังไม่ได้ล็อกอิน -> แสดงหน้ากากเบลอ + ปุ่ม Log in
+    if (!currentUser) {
+        if (favSection) favSection.classList.add("is-locked");
+        if (seeMoreBtn) seeMoreBtn.hidden = true;
+        if (loginOverlay) loginOverlay.hidden = false;
+        if (favState) {
+            favState.classList.add("with-blur");
+            favState.innerHTML = `
+                <p class="message">Not logged in</p>
+                <p class="submessage">
+                    Please <a href="login.html">log in</a> to use this feature
+                </p>
+            `;
+            favState.hidden = false;
+        }
         favContainer.hidden = true;
         return;
     }
 
-    // กรณีที่ 3: เข้าสู่ระบบแล้ว และมีรายการทีมโปรด
-    favState.hidden = true;
+    // 2. ล็อกอินแล้ว -> ปลดล็อกหน้ากากเบลอและแสดงปุ่ม See more
+    if (favSection) favSection.classList.remove("is-locked");
+    if (loginOverlay) loginOverlay.hidden = true;
+    if (seeMoreBtn) seeMoreBtn.hidden = false;
+    if (favState) favState.classList.remove("with-blur");
+
+    // 3. ล็อกอินแล้ว แต่ยังไม่มีทีมโปรดที่บันทึกไว้
+    if (!favoriteTeams || favoriteTeams.length === 0) {
+        if (favState) {
+            favState.innerHTML = `
+                <p class="message">No favorite team yet</p>
+                <p class="submessage">
+                    Heart your favorite teams to track their form and stats right here.
+                    <a href="teams.html" class="btn-browse-teams">+ Browse Teams</a>
+                </p>
+            `;
+            favState.hidden = false;
+        }
+        favContainer.hidden = true;
+        return;
+    }
+
+    // 4. ล็อกอินแล้ว และมีรายการทีมโปรด -> ซ่อนข้อความแจ้งเตือนและแสดงการ์ดทีม
+    if (favState) favState.hidden = true;
     favContainer.hidden = false;
     favContainer.innerHTML = favoriteTeams.map((team) => `
-        <div class="team-col">
+        <div class="team-col" onclick="window.location.href='/teams.html?id=${team.team_id}'" style="cursor: pointer;">
             ${createTeamLogo(team.team_id, true).outerHTML}
             <p class="team-name">${team.team_name}</p>
             <p class="overview-result">
@@ -126,21 +161,5 @@ function renderFavoriteTeams(favoriteTeams, favoritePlayers) {
                 <span class="lose">L${team.losses}</span>
             </p>
         </div>
-    `).join("") + favoritePlayers.map((player) => `
-        <div class="team-col">
-            <img src="assets/img.jpg" alt="">
-            <p class="team-name">${player.display_name || player.player_name}</p>
-            <p class="overview-result">${player.team_name}</p>
-        </div>
     `).join("");
-
-    // ตรวจสอบว่าการ์ดทีมโปรดล้นความกว้างกล่องหรือไม่ เพื่อแสดง/ซ่อนปุ่ม See more
-    const checkOverflow = () => {
-        if (!seeMoreBtn) return;
-        const isOverflow = favContainer.scrollWidth > favContainer.clientWidth;
-        seeMoreBtn.hidden = !isOverflow;
-    };
-
-    checkOverflow();
-    window.addEventListener("resize", checkOverflow);
 }

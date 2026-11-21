@@ -92,13 +92,12 @@
     outline-offset: 3px;
 }
 
-/* Shared 35px Circular Avatars / Logos */
+/* Shared 35px Avatars / Logos */
 .team-side img,
 .player-avatar,
 .team-col img {
     width: 35px;
     height: 35px;
-    border-radius: 50%;
 }
 
 /* ================= KPI Cards ================= */
@@ -203,6 +202,7 @@
 
 .player-avatar {
     object-fit: cover;
+    border-radius: 50%;
 }
 
 .col-goals {
@@ -212,7 +212,8 @@
 }
 
 /* ================= My Favorites ================= */
-.panel-card.favorite-teams {
+.panel-card.favorite-teams,
+#dashboard-favorites {
     position: relative;
 }
 
@@ -222,10 +223,11 @@
     gap: 10px;
 }
 
-/* Overlay แจ้งเตือนเมื่อยังไม่ล็อกอินหรือไม่มีข้อมูล */
+/* สถานะว่างเมื่อล็อกอินแล้วแต่ยังไม่มีทีมโปรด */
 .state-message {
     position: absolute;
     inset: 0;
+    z-index: 10;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -235,7 +237,6 @@
     font-size: 14px;
     font-weight: 600;
     color: #5E6378;
-    z-index: 10;
 }
 
 .state-message.with-blur {
@@ -260,9 +261,44 @@
     color: #5D25C4;
 }
 
+/* สถานะล็อก (เบลอการ์ดทั้งหมดและแสดงปุ่ม Log in ตรงกลาง) */
+#dashboard-favorites.is-locked {
+    min-height: 175px;
+}
+
+#dashboard-favorites.is-locked > :not(.favorites-lock) {
+    filter: blur(6px);
+    pointer-events: none;
+    user-select: none;
+}
+
+.favorites-lock {
+    display: none;
+}
+
+#dashboard-favorites.is-locked .favorites-lock {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    background: rgb(255 255 255 / 38%);
+    border-radius: inherit;
+}
+
+.favorites-lock a {
+    padding: 10px 18px;
+    border-radius: 8px;
+    background: #17152D;
+    color: #FFFFFF;
+    font-weight: 600;
+    text-decoration: none;
+}
+
 /* รายการการ์ดทีมโปรด */
 .fav-teams-list {
     display: flex;
+    justify-content: space-between;
     gap: 20px;
 }
 
@@ -298,40 +334,4 @@
 
 .overview-result .lose {
     color: #FF383C;
-}
-#dashboard-favorites {
-    position: relative;
-}
-
-#dashboard-favorites.is-locked {
-    min-height: 175px;
-}
-
-#dashboard-favorites.is-locked > :not(.favorites-lock) {
-    filter: blur(6px);
-    pointer-events: none;
-    user-select: none;
-}
-
-.favorites-lock {
-    display: none;
-}
-
-#dashboard-favorites.is-locked .favorites-lock {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    display: grid;
-    place-items: center;
-    background: rgb(255 255 255 / 38%);
-    border-radius: inherit;
-}
-
-.favorites-lock a {
-    padding: 10px 18px;
-    border-radius: 8px;
-    background: #17152d;
-    color: white;
-    font-weight: 600;
-    text-decoration: none;
 }

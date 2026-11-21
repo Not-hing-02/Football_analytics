@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/dashboard-page.css">
     <script src="js/main-app.js" defer></script>
     <script src="js/dashboard-app.js" defer></script>
-    <title>Premier League</title>
+    <title>Dashboard · Premier League</title>
 </head>
 
 <body>
@@ -52,8 +52,8 @@
                 </div>
 
                 <div class="right-header">
-                    <form action="search.html" method="GET" class="search-form">
-                        <input type="search" name="q" id="search" placeholder="Search">
+                    <form action="search.html" method="GET" class="search-form" novalidate>
+                        <input type="search" name="q" id="search" placeholder="Search" minlength="2" maxlength="50" required>
                     </form>
                     <div class="profile" hidden>
                         <div class="photo-profile">
@@ -77,26 +77,26 @@
                             <h2>Premier League Analytics</h2>
                             <p>Explore teams, players and match statistics in this season</p>
                         </div>
-                        <span class="season-badge" id="season-badge">Season 2026</span>
+                        <span class="season-badge" id="season-badge"><!-- จะถูกแทนที่ด้วยข้อมูลจริงจาก JS --></span>
                     </section>
 
                     <!-- KPI Cards -->
                     <section class="kpi-section">
                         <div class="panel-card kpi-card">
                             <span class="kpi-label">TOTAL TEAMS</span>
-                            <strong class="kpi-value" id="kpi-teams">20</strong>
+                            <strong class="kpi-value" id="kpi-teams"><!-- จะถูกแทนที่ด้วยข้อมูลจริงจาก JS --></strong>
                         </div>
                         <div class="panel-card kpi-card">
                             <span class="kpi-label">TOTAL PLAYERS</span>
-                            <strong class="kpi-value" id="kpi-players">532</strong>
+                            <strong class="kpi-value" id="kpi-players"><!-- จะถูกแทนที่ด้วยข้อมูลจริงจาก JS --></strong>
                         </div>
                         <div class="panel-card kpi-card">
                             <span class="kpi-label">MATCHES PLAYED</span>
-                            <strong class="kpi-value" id="kpi-played">380</strong>
+                            <strong class="kpi-value" id="kpi-played"><!-- จะถูกแทนที่ด้วยข้อมูลจริงจาก JS --></strong>
                         </div>
                         <div class="panel-card kpi-card">
                             <span class="kpi-label">UPCOMING</span>
-                            <strong class="kpi-value" id="kpi-upcoming">12</strong>
+                            <strong class="kpi-value" id="kpi-upcoming"><!-- จะถูกแทนที่ด้วยข้อมูลจริงจาก JS --></strong>
                         </div>
                     </section>
 
@@ -105,22 +105,11 @@
                         <div class="panel-card recent-matches">
                             <div class="panel-header">
                                 <h3>Recent Matches</h3>
-                                <a href="matches.html" class="see-more">See more</a>
+                                <a href="matches.html?status=completed" class="see-more">See more</a>
                             </div>
+                            <!-- matches (จะถูกแทนที่ด้วยข้อมูลจริงจาก JS) -->
                             <div class="matches-list" id="recent-matches-list">
-                                <div class="match-row">
-                                    <div class="match-item team-side home">
-                                        <img src="assets/img.jpg" alt="home-photo">
-                                        <span>Home name</span>
-                                    </div>
-                                    <div class="match-item match-score">
-                                        <span>2-3</span>
-                                    </div>
-                                    <div class="match-item team-side away">
-                                        <img src="assets/img.jpg" alt="away-photo">
-                                        <span>Away name</span>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
 
@@ -137,17 +126,9 @@
                                             <th class="col-goals">Goals</th>
                                         </tr>
                                     </thead>
+                                    <!-- top scorers (จะถูกแทนที่ด้วยข้อมูลจริงจาก JS) -->
                                     <tbody id="top-scorers-list">
-                                        <tr>
-                                            <td class="col-rank">1.</td>
-                                            <td class="col-player">
-                                                <div class="player-info">
-                                                    <img class="player-avatar" src="assets/img.jpg" alt="player-photo">
-                                                    <span class="player-name">Name</span>
-                                                </div>
-                                            </td>
-                                            <td class="col-goals">20</td>
-                                        </tr>
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -156,39 +137,29 @@
 
                     <!-- Bottom Section: My Favorites -->
                     <section class="bottom-section">
-                            <div class="panel-card favorite-teams is-locked" id="dashboard-favorites">
-                                <div class="favorites-lock">
-                                    <a href="/login.html">Log in to view your favorites</a>
+                        <div class="panel-card favorite-teams is-locked" id="dashboard-favorites">
+                            <div class="favorites-lock">
+                                <a href="/login.html">Log in to view your favorites</a>
+                            </div>
+                            <div class="fav-teams-panel">
+                                <div class="panel-header">
+                                    <h3>My favorite</h3>
+                                    <a href="teams.html?favorites=1" class="see-more">See more</a>
                                 </div>
-                                <div class="fav-teams-panel">
-                                    <div class="panel-header">
-                                        <h3>My favorite</h3>
-                                        <a href="my_fav.html" class="see-more" hidden>See more</a>
-                                    </div>
-                                    <!-- Empty / Unauthenticated State Overlay -->
-                                    <div class="state-message with-blur" hidden id="fav-state">
-                                        <p class="message">No favorites yet</p>
-                                        <p class="submessage">
-                                            Heart your favorite teams to track their form and stats right here.
-                                            <a href="teams.html" class="btn-browse-teams">+ Browse Teams</a>
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- Favorite Teams Cards -->
-                                <div class="fav-teams-list" hidden id="favorite-teams-list">
-                                    <div class="team-col">
-                                        <img src="assets/img.jpg" alt="team-photo">
-                                        <p class="team-name">name team</p>
-                                        <p class="overview-result">
-                                            <span class="win">W99</span>
-                                            <span>/</span>
-                                            <span class="draw">D99</span>
-                                            <span>/</span>
-                                            <span class="lose">L99</span>
-                                        </p>
-                                    </div>
+                                <!-- Empty / Unauthenticated State Overlay -->
+                                <div class="state-message with-blur" hidden id="fav-state">
+                                    <p class="message">No favorites yet</p>
+                                    <p class="submessage">
+                                        Heart your favorite teams to track their form and stats right here.
+                                        <a href="teams.html" class="btn-browse-teams">+ Browse Teams</a>
+                                    </p>
                                 </div>
                             </div>
+                            <!-- Favorite Teams Cards (จะถูกแทนที่ด้วยข้อมูลจริงจาก JS) -->
+                            <div class="fav-teams-list" hidden id="favorite-teams-list">
+
+                            </div>
+                        </div>
                     </section>
                 </div>
             </main>

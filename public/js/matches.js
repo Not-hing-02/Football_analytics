@@ -201,6 +201,13 @@ async function loadMatches() {
         }
 
         updateTeams();
+
+        // รับค่า ?id=... ที่คลิกมาจากหน้า Search แล้วเปิด Dialog รายละเอียดอัตโนมัติ
+        const targetMatchId = new URLSearchParams(window.location.search).get("id");
+        if (targetMatchId) {
+            const matchedMatch = matches.find((m) => String(m.id) === targetMatchId);
+            if (matchedMatch) openDetails(matchedMatch);
+        }
     } catch (error) {
         message.hidden = false;
         message.textContent = "โหลดแมตช์ไม่สำเร็จ กรุณาลองอีกครั้ง";
@@ -232,30 +239,29 @@ next.addEventListener("click", () => {
 
 const matchTabs = document.querySelectorAll(".match-tabs button");
 
+// [แก้ไข] แยกฟังก์ชันอัปเดตสถานะตัวกรองและปุ่มแท็บ เพื่อใช้ร่วมกันทั้งตอนคลิกแท็บและตอนอ่านค่าจาก URL
+function setMatchStatus(status) {
+    statusFilter.value = status;
+
+    for (const tab of matchTabs) {
+        tab.setAttribute(
+            "aria-pressed",
+            String(tab.dataset.status === status)
+        );
+    }
+}
+
 for (const button of matchTabs) {
     button.addEventListener("click", () => {
-        statusFilter.value = button.dataset.status;
-
-        for (const tab of matchTabs) {
-            tab.setAttribute(
-                "aria-pressed",
-                String(tab === button)
-            );
-        }
-
+        setMatchStatus(button.dataset.status);
         resetPage();
     });
 }
 
-
-statusFilter.value = "scheduled";
-
-document.querySelectorAll(".match-tabs button").forEach(button => {
-    button.setAttribute(
-        "aria-pressed",
-        String(button.dataset.status === statusFilter.value)
-    );
-});
-
+// [แก้ไข] อ่านค่า ?status=... จาก URL (เช่น ?status=completed ที่กดมาจาก See more หน้า Dashboard)
+// ถ้าไม่มีค่าใน URL หรือค่าไม่ถูกต้อง ให้ใช้ "scheduled" เป็นค่าเริ่มต้นเหมือนเดิม
+const urlStatus = new URLSearchParams(window.location.search).get("status");
+const validStatuses = new Set([...matchTabs].map((btn) => btn.dataset.status));
+setMatchStatus(validStatuses.has(urlStatus) ? urlStatus : "scheduled");
 
 loadMatches();

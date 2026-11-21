@@ -4,10 +4,12 @@
 let currentFilter = "teams"; // 'teams' | 'players'
 let cachedFavData = { teams: [], players: [] };
 
-// ไอคอนรูปหัวใจสีแดงสำหรับปุ่มยกเลิกรายการโปรดบนการ์ด
+// ไอคอนรูปหัวใจมาตรฐานเดียวกับหน้า Teams, Players และ Search
 const HEART_ICON_SVG = `
-    <svg class="heart-icon" width="50" height="50" viewBox="0 0 24 24" fill="red" xmlns="http://www.w3.org/2000/svg" style="cursor:pointer;">
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67
+            l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78
+            L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"/>
     </svg>
 `;
 
@@ -16,6 +18,8 @@ const HEART_ICON_SVG = `
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     setupFilterTabs();
+
+    // อัปเดตรายการใหม่ทุกครั้งที่มีการเพิ่ม/ลบรายการโปรด
     document.addEventListener("favoriteschange", () => loadMyFavorites(2026));
 });
 
@@ -38,8 +42,7 @@ function setupFilterTabs() {
 // ==========================================
 async function loadMyFavorites(seasonId) {
     try {
-        const url = `/api/myfav?season=${seasonId}`;
-        const response = await fetch(url);
+        const response = await fetch(`/api/myfav?season=${seasonId}`);
         const data = await response.json();
 
         if (data.success) {
@@ -74,7 +77,14 @@ function renderFavoriteTeams(teams) {
 
     return teams.map((team) => `
         <div class="fav-card team" data-id="${team.team_id}">
-            <button type="button" class="favorite-remove" aria-label="Remove favorite team" data-fav-type="teams" data-fav-id="${team.team_id}">
+            <button
+                type="button"
+                class="standings-heart favorite-remove"
+                aria-label="Remove favorite ${team.team_name}"
+                aria-pressed="true"
+                data-fav-type="teams"
+                data-fav-id="${team.team_id}"
+            >
                 ${HEART_ICON_SVG}
             </button>
             ${createTeamLogo(team.team_id, true, "fav-photo").outerHTML}
@@ -94,7 +104,14 @@ function renderFavoritePlayers(players) {
 
     return players.map((player) => `
         <div class="fav-card player" data-id="${player.player_id}">
-            <button type="button" class="favorite-remove" aria-label="Remove favorite player" data-fav-type="players" data-fav-id="${player.player_id}">
+            <button
+                type="button"
+                class="player-heart favorite-remove"
+                aria-label="Remove favorite ${player.display_name}"
+                aria-pressed="true"
+                data-fav-type="players"
+                data-fav-id="${player.player_id}"
+            >
                 ${HEART_ICON_SVG}
             </button>
             <img class="fav-photo" src="assets/img.jpg" alt="${player.display_name}">

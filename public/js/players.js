@@ -268,6 +268,13 @@ async function loadPlayers() {
 
         emptyMessage.textContent = "ไม่พบนักเตะที่ตรงกับตัวกรอง";
         renderPlayers();
+
+        // รับค่า ?id=... ที่คลิกมาจากหน้า Search แล้วเปิด Dialog รายละเอียดอัตโนมัติ
+        const targetPlayerId = new URLSearchParams(window.location.search).get("id");
+        if (targetPlayerId) {
+            const matchedPlayer = players.find((p) => String(p.id) === targetPlayerId);
+            if (matchedPlayer) openPlayerDetails(matchedPlayer);
+        }
     } catch (error) {
         emptyMessage.hidden = false;
         emptyMessage.textContent =

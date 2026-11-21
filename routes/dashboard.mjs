@@ -1,8 +1,7 @@
-import { sessionUser } from "./auth.mjs";
-import { readFavorites } from "./favorites.mjs";
-import { FAVORITE_PLAYERS_QUERY } from "./myfav.mjs";
 import express from "express";
 import pool from "../db.mjs";
+import { sessionUser } from "./auth.mjs";
+import { readFavorites } from "./favorites.mjs";
 
 const router = express.Router();
 
@@ -67,7 +66,7 @@ const TOP_SCORERS_QUERY = `
     LIMIT 5
 `;
 
-// ดึงสถิติ ชนะ / เสมอ / แพ้ ของกลุ่มทีมโปรด
+// ดึงสถิติ ชนะ / เสมอ / แพ้ ของกลุ่มทีมโปรด (จำกัดสูงสุด 10 ทีม)
 const FAV_TEAMS_QUERY = `
     SELECT
         t.team_id, t.team_name, t.short_name,
@@ -89,6 +88,7 @@ const FAV_TEAMS_QUERY = `
        AND m.status = 'completed'
     WHERE t.team_id = ANY($2::int[])
     GROUP BY t.team_id, t.team_name, t.short_name
+    LIMIT 10
 `;
 
 // ==========================================
@@ -96,18 +96,19 @@ const FAV_TEAMS_QUERY = `
 // ==========================================
 router.get("/dashboard", async (req, res) => {
     const seasonId = parseInt(req.query.season, 10) || 2026;
+
+    // ป้องกันเบราว์เซอร์แคชข้อมูลรายการโปรดที่เปลี่ยนตามผู้ใช้
     res.set("Cache-Control", "no-store");
-    const { teams: favTeamIds, players: favPlayerIds } = readFavorites(sessionUser(req)?.id);
+    const { teams: favTeamIds } = readFavorites(sessionUser(req)?.id);
 
     try {
         // รัน Query ทั้งหมดพร้อมกันเพื่อลดเวลาการรอ Response
-        const [seasonRes, kpiRes, matchesRes, scorersRes, favRes, favPlayersRes] = await Promise.all([
+        const [seasonRes, kpiRes, matchesRes, scorersRes, favRes] = await Promise.all([
             pool.query(SEASON_QUERY, [seasonId]),
             pool.query(KPI_QUERY, [seasonId]),
             pool.query(RECENT_MATCHES_QUERY, [seasonId]),
             pool.query(TOP_SCORERS_QUERY, [seasonId]),
-            pool.query(FAV_TEAMS_QUERY, [seasonId, favTeamIds]),
-            pool.query(FAVORITE_PLAYERS_QUERY, [seasonId, favPlayerIds])
+            pool.query(FAV_TEAMS_QUERY, [seasonId, favTeamIds])
         ]);
 
         const seasonLabel = seasonRes.rows[0]?.label || null;
@@ -125,8 +126,7 @@ router.get("/dashboard", async (req, res) => {
             },
             recent_matches: matchesRes.rows,
             top_scorers: scorersRes.rows,
-            favorite_teams: favRes.rows,
-            favorite_players: favPlayersRes.rows
+            favorite_teams: favRes.rows
         });
     } catch (error) {
         console.error("Dashboard API Error:", error);

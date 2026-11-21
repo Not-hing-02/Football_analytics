@@ -1,5 +1,7 @@
 let teams;
-let favoritesOnly = false;
+
+// [แก้ไข] ตรวจสอบ URL parameter ?favorites=1 เพื่อเปิดโหมดแสดงเฉพาะทีมโปรดอัตโนมัติเมื่อกด See more มาจาก Dashboard
+let favoritesOnly = new URLSearchParams(window.location.search).get("favorites") === "1";
 
 const grid = document.getElementById("team-grid");
 const cardTemplate = document.getElementById("team-card-template");
@@ -12,6 +14,11 @@ const seasonFilter = document.getElementById("team-season");
 const stadiumFilter = document.getElementById("stadium-filter");
 const cityFilter = document.getElementById("city-filter");
 const favoritesFilter = document.getElementById("team-favorites");
+
+// [แก้ไข] อัปเดตสถานะปุ่ม My Favorites (aria-pressed) ให้ตรงกับค่า favoritesOnly ตั้งแต่โหลดหน้า
+if (favoritesFilter) {
+    favoritesFilter.setAttribute("aria-pressed", String(favoritesOnly));
+}
 
 document.addEventListener("favoriteschange", () => {
     if (teams) renderTeams();
@@ -138,7 +145,12 @@ async function loadTeams() {
     retryButton.hidden = true;
 
     try {
-        const response = await fetch("/api/teams");
+        // [แก้ไข] รอให้ authReady (จาก main-app.js) โหลดรายการโปรด (favoriteIds) เสร็จพร้อมกับการดึงข้อมูลทีม
+        // เพื่อไม่ให้ renderTeams() ทำงานก่อนที่ favoriteIds.teams จะมีข้อมูล (ป้องกันหน้าว่างตอนเปิด ?favorites=1)
+        const [response] = await Promise.all([
+            fetch("/api/teams"),
+            Promise.resolve(typeof authReady !== "undefined" ? authReady : null)
+        ]);
 
         if (!response.ok) {
             throw new Error(`Unable to load teams (${response.status})`);
@@ -157,6 +169,17 @@ async function loadTeams() {
         }
 
         updateSeasonFilters();
+
+        // รับค่า ?id=... ที่คลิกมาจากหน้า Search แล้วเปิด Dialog รายละเอียดอัตโนมัติ
+        const targetTeamId = new URLSearchParams(window.location.search).get("id");
+        if (targetTeamId) {
+            // [แก้ไข] ค้นหาทีมในฤดูกาลที่เลือกอยู่ก่อน เพื่อให้ข้อมูลสนามเหย้าตรงกับฤดูกาลล่าสุด
+            const matchedTeam =
+                teams.find((t) => String(t.id) === targetTeamId && String(t.season_id) === seasonFilter.value) ||
+                teams.find((t) => String(t.id) === targetTeamId);
+            if (matchedTeam) openTeamDetails(matchedTeam);
+        }
+
     } catch (error) {
         statusMessage.hidden = false;
         statusMessage.textContent = "โหลดข้อมูลทีมไม่สำเร็จ";

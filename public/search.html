@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/search-page.css">
     <script src="js/main-app.js" defer></script>
     <script src="js/search-app.js" defer></script>
-    <title>Premier League</title>
+    <title>Search · Premier League</title>
 </head>
 <body>
     <div class="container">
@@ -50,7 +50,7 @@
                 <div class="right-header">
                     <div class="profile" hidden>
                         <div class="photo-profile">
-                            <img src="assets/img.png" alt="photo">
+                            <img src="assets/img.jpg" alt="photo">
                         </div>
                         <div class="info-profile">
                             <p class="name">Username</p>
@@ -62,15 +62,16 @@
             </header>
 
             <!-- Main Content -->
+            <!-- Main Content -->
             <main class="main">
                 <div class="main-content">
                     <!-- Search Input Form -->
-                    <form action="search.html" method="GET" class="search-form">
+                    <form action="search.html" method="GET" class="search-form" novalidate>
                         <div class="search-bar-group">
-                            <input type="search" name="q" id="search" placeholder="Search">
+                            <input type="search" name="q" id="search" placeholder="Search" minlength="2" maxlength="50" required>
                             <button type="submit" class="btn-search">Search</button>
                         </div>
-                        <p class="search-hint">Search by team, player name or match.</p>
+                        <p class="search-hint">Search by team, player name or match (2–50 characters).</p>
                     </form>
 
                     <!-- Category Filter Tabs & Season Selector -->
@@ -86,8 +87,6 @@
                             <label for="season-select">Season</label>
                             <select id="season-select" name="season">
                                 <option value="all">All seasons</option>
-                                <option value="2026-27">2026/27</option>
-                                <option value="2025-26">2025/26</option>
                             </select>
                         </div>
                     </div>
@@ -100,38 +99,8 @@
                             No results found. Try searching for another team, player, or match.
                         </div>
 
-                        <!-- Result Categories (จะถูกแทนที่ด้วยข้อมูลจริงจาก JS) -->
-                        <div class="result-list" id="search-result-list">
-                            <div class="category teams-list">
-                                <h4>Teams</h4>
-                                <div class="list-item team-row">
-                                    <img src="assets/img.jpg" alt="photo-result">
-                                    <div class="info">
-                                        <p class="header-info">name</p>
-                                        <p class="detail-info">Emirates Stadium · Premier League</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="category players-list">
-                                <h4>Players</h4>
-                                <div class="list-item player-row">
-                                    <img src="assets/img.jpg" alt="photo-result">
-                                    <div class="info">
-                                        <p class="header-info">name</p>
-                                        <p class="detail-info">Emirates Stadium · Premier League</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="category matches-list">
-                                <h4>Matches</h4>
-                                <div class="list-item matche-row">
-                                    <div class="info">
-                                        <p class="header-info">name</p>
-                                        <p class="detail-info">Emirates Stadium · Premier League</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Result Categories (แสดงผลผ่าน JS) -->
+                        <div class="result-list" id="search-result-list"></div>
                     </div>
                 </div>
             </main>

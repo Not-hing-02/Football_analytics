@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/standing-page.css">
     <script src="js/main-app.js" defer></script>
     <script src="js/standing-app.js" defer></script>
-    <title>Premier League</title>
+    <title>Standing · Premier League</title>
 </head>
 <body>
     <div class="container">
@@ -53,7 +53,7 @@
                     </form>
                     <div class="profile" hidden>
                         <div class="photo-profile">
-                            <img src="assets/img.png" alt="photo">
+                            <img src="assets/img.jpg" alt="photo">
                         </div>
                         <div class="info-profile">
                             <p class="name">Username</p>
@@ -78,7 +78,6 @@
                         <label for="season-select">Season</label>
                         <select id="season-select" name="season">
                             <option value="2026">2026/27</option>
-                            <option value="2025">2025/26</option>
                         </select>
                     </div>
                 </div>
@@ -110,56 +109,7 @@
                             </tr>
                         </thead>
                         <tbody id="standings-list">
-                            <!-- แถวตัวอย่างเริ่มต้น (จะถูกแทนที่ด้วยข้อมูลจาก JS) -->
-                            <tr class="zone-ucl is-champion">
-                                <td class="col-pos">1</td>
-                                <td class="col-team">
-                                    <div class="team-info">
-                                        <span class="team-name">Liverpool</span>
-                                        <span class="badge badge-champion">CHAMPIONS</span>
-                                    </div>
-                                </td>
-                                <td class="col-played">38</td>
-                                <td class="col-won">25</td>
-                                <td class="col-drawn">9</td>
-                                <td class="col-lost">4</td>
-                                <td class="col-gf">86</td>
-                                <td class="col-ga">41</td>
-                                <td class="col-gd">+45</td>
-                                <td class="col-pts">84</td>
-                            </tr>
-                            <tr class="zone-ucl">
-                                <td class="col-pos">2</td>
-                                <td class="col-team">
-                                    <div class="team-info">
-                                        <span class="team-name">Arsenal</span>
-                                    </div>
-                                </td>
-                                <td class="col-played">38</td>
-                                <td class="col-won">20</td>
-                                <td class="col-drawn">14</td>
-                                <td class="col-lost">4</td>
-                                <td class="col-gf">69</td>
-                                <td class="col-ga">34</td>
-                                <td class="col-gd">+35</td>
-                                <td class="col-pts">74</td>
-                            </tr>
-                            <tr class="zone-relegation">
-                                <td class="col-pos">18</td>
-                                <td class="col-team">
-                                    <div class="team-info">
-                                        <span class="team-name">Leicester City</span>
-                                    </div>
-                                </td>
-                                <td class="col-played">38</td>
-                                <td class="col-won">6</td>
-                                <td class="col-drawn">7</td>
-                                <td class="col-lost">25</td>
-                                <td class="col-gf">33</td>
-                                <td class="col-ga">80</td>
-                                <td class="col-gd">-47</td>
-                                <td class="col-pts">25</td>
-                            </tr>
+                            <!-- standing (จะถูกแทนที่ด้วยข้อมูลจริงจาก JS) -->
                         </tbody>
                     </table>
                 </div>
@@ -177,7 +127,7 @@
                         </div>
                     </div>
                     <div class="table-notes">
-                        <span class="abbreviations">P: Played &nbsp; W: Won &nbsp; D: Drawn &nbsp; L: Lost &nbsp; GD: Goal difference</span>
+                        <span class="abbreviations">P: Played &nbsp; W: Won &nbsp; D: Drawn &nbsp; L: Lost &nbsp; GF: Goal For &nbsp; GA: Goal Against &nbsp; GD: Goal difference</span>
                     </div>
                 </footer>
             </main>

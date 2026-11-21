@@ -1,25 +1,16 @@
 // ==========================================
 // 1. ตัวแปรสถานะหลักของหน้า Standings
 // ==========================================
-let currentSeason = 2026;
+let currentSeason = null; // null = ให้ Backend เลือกฤดูกาลล่าสุดจาก DB อัตโนมัติ
 let currentFilter = "all"; // 'all' | 'home' | 'away'
-
-// รายการฤดูกาลสำหรับแสดงใน Dropdown
-const SEASONS = [
-    { id: 2026, label: "2026/27" },
-    { id: 2025, label: "2025/26" },
-    { id: 2024, label: "2024/25" },
-    { id: 2023, label: "2023/24" },
-    { id: 2022, label: "2022/23" },
-    { id: 2021, label: "2021/22" }
-];
+let isSeasonInitialized = false;
 
 // ==========================================
 // 2. เริ่มต้นการทำงานเมื่อโหลดหน้าเว็บ
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     initStickyHeader();
-    initSeasonSelect();
+    initSeasonListener();
     initFilterTabs();
     loadStandings();
 });
@@ -33,7 +24,6 @@ function initStickyHeader() {
 
     const observer = new IntersectionObserver(
         ([entry]) => {
-            // เมื่อ sentinel เลื่อนพ้นขอบบนหน้าจอ (top < 0) แปลว่าหัวตารางเริ่มติด sticky แล้ว
             const isStuck = !entry.isIntersecting && entry.boundingClientRect.top < 0;
             thead.classList.toggle("is-stuck", isStuck);
         },
@@ -43,19 +33,30 @@ function initStickyHeader() {
     observer.observe(sentinel);
 }
 
-// สร้างตัวเลือกฤดูกาลใน Dropdown และผูก Event เมื่อเปลี่ยนค่า
-function initSeasonSelect() {
+// ผูก Event เมื่อเปลี่ยนค่าใน Dropdown ฤดูกาล
+function initSeasonListener() {
     const seasonSelect = document.getElementById("season-select");
     if (!seasonSelect) return;
-
-    seasonSelect.innerHTML = SEASONS
-        .map((s) => `<option value="${s.id}">${s.label}</option>`)
-        .join("");
 
     seasonSelect.addEventListener("change", (e) => {
         currentSeason = Number(e.target.value);
         loadStandings();
     });
+}
+
+// นำรายการ seasons จาก Database มาสร้าง <option> ใน Dropdown
+function populateSeasonSelect(seasons, activeSeasonId) {
+    const seasonSelect = document.getElementById("season-select");
+    if (!seasonSelect || !Array.isArray(seasons)) return;
+
+    seasonSelect.innerHTML = seasons
+        .map((s) => {
+            const selected = Number(s.season_id) === Number(activeSeasonId) ? "selected" : "";
+            return `<option value="${s.season_id}" ${selected}>${s.label}</option>`;
+        })
+        .join("");
+
+    isSeasonInitialized = true;
 }
 
 // ผูก Event สำหรับปุ่มสลับตัวกรอง Overview / Home / Away
@@ -77,10 +78,21 @@ function initFilterTabs() {
 // ==========================================
 async function loadStandings() {
     try {
-        const res = await fetch(`/api/standing?season=${currentSeason}&filter=${currentFilter}`);
+        const params = new URLSearchParams({ filter: currentFilter });
+        if (currentSeason !== null) {
+            params.set("season", String(currentSeason));
+        }
+
+        const res = await fetch(`/api/standing?${params.toString()}`);
         const data = await res.json();
 
         if (!data.success) return;
+
+        currentSeason = Number(data.season_id);
+
+        if (!isSeasonInitialized && data.seasons) {
+            populateSeasonSelect(data.seasons, currentSeason);
+        }
 
         updateMetaBar(data);
         renderStandingsTable(data);

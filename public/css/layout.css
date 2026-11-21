@@ -226,15 +226,12 @@
 
 /* ================= Main Content ================= */
 .main {
-  flex: 1;
-  margin-top: 6px;
-  padding: 0 30px;
+    flex: 1;
+    margin-top: 6px;
+    padding: 0 30px;
 }
 
-
-
-
-/* หัวใจของหน้า Players และ Teams */
+/* ================= Shared Favorite Heart Buttons ================= */
 body .player-heart,
 body .standings-heart {
     display: inline-grid;
@@ -265,13 +262,13 @@ body .standings-heart svg {
 
 body .player-heart:hover,
 body .standings-heart:hover {
-    background: #fff0f3;
-    color: #e33453;
+    background: #FFF0F3;
+    color: #E33453;
 }
 
 body .player-heart[aria-pressed="true"],
 body .standings-heart[aria-pressed="true"] {
-    color: #e33453;
+    color: #E33453;
 }
 
 body .player-heart[aria-pressed="true"] svg,
@@ -279,7 +276,7 @@ body .standings-heart[aria-pressed="true"] svg {
     fill: currentColor;
 }
 
-/* ปุ่ม My Favorites ทั้งสองหน้า */
+/* ================= Shared Favorites Filter Buttons ================= */
 body #favorites-filter,
 body #team-favorites {
     display: inline-flex;
@@ -292,8 +289,8 @@ body #team-favorites {
     padding: 0 18px;
     border: 1px solid transparent;
     border-radius: 9px;
-    background: #5b27b6;
-    color: white;
+    background: #5B27B6;
+    color: #FFFFFF;
     font-family: inherit;
     font-size: 13px;
     font-weight: 600;
@@ -310,34 +307,19 @@ body #team-favorites:hover {
 
 body #favorites-filter[aria-pressed="true"],
 body #team-favorites[aria-pressed="true"] {
-    background: #37166f;
-    box-shadow: 0 0 0 2px #baa1ef;
+    background: #37166F;
+    box-shadow: 0 0 0 2px #BAA1EF;
 }
 
 body .player-heart:focus-visible,
 body .standings-heart:focus-visible,
 body #favorites-filter:focus-visible,
 body #team-favorites:focus-visible {
-    outline: 2px solid #9272e1;
+    outline: 2px solid #9272E1;
     outline-offset: 3px;
 }
 
-@media (max-width: 760px) {
-    body #favorites-filter,
-    body #team-favorites {
-        margin-left: 0;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    body .player-heart,
-    body .standings-heart,
-    body #favorites-filter,
-    body #team-favorites {
-        transition: none;
-    }
-
-}
+/* ================= Shared Club Logos ================= */
 .club-logo {
     vertical-align: middle;
 }
