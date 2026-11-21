@@ -299,3 +299,39 @@
 .overview-result .lose {
     color: #FF383C;
 }
+#dashboard-favorites {
+    position: relative;
+}
+
+#dashboard-favorites.is-locked {
+    min-height: 175px;
+}
+
+#dashboard-favorites.is-locked > :not(.favorites-lock) {
+    filter: blur(6px);
+    pointer-events: none;
+    user-select: none;
+}
+
+.favorites-lock {
+    display: none;
+}
+
+#dashboard-favorites.is-locked .favorites-lock {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    background: rgb(255 255 255 / 38%);
+    border-radius: inherit;
+}
+
+.favorites-lock a {
+    padding: 10px 18px;
+    border-radius: 8px;
+    background: #17152d;
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+}

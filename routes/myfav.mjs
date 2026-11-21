@@ -1,3 +1,5 @@
+import { sessionUser } from "./auth.mjs";
+import { readFavorites } from "./favorites.mjs";
 import express from "express";
 import pool from "../db.mjs";
 
@@ -23,7 +25,7 @@ const FAVORITE_TEAMS_QUERY = `
 `;
 
 // 2. ดึงข้อมูลนักเตะโปรด + สโมสรและตำแหน่งล่าสุดในฤดูกาลที่เลือก
-const FAVORITE_PLAYERS_QUERY = `
+export const FAVORITE_PLAYERS_QUERY = `
     SELECT DISTINCT ON (p.player_id)
         p.player_id,
         p.display_name,
@@ -44,8 +46,10 @@ const FAVORITE_PLAYERS_QUERY = `
 // ==========================================
 router.get("/myfav", async (req, res) => {
     const seasonId = parseInt(req.query.season, 10) || 2026;
-    const teamIds = parseIdList(req.query.teams);
-    const playerIds = parseIdList(req.query.players);
+    res.set("Cache-Control", "no-store");
+    const user = sessionUser(req);
+    if (!user) return res.status(401).json({ success: false });
+    const { teams: teamIds, players: playerIds } = readFavorites(user.id);
 
     try {
         // ดึงข้อมูลทีมโปรดและนักเตะโปรดพร้อมกัน (เฉพาะหมวดที่มี ID ส่งมา)
@@ -69,11 +73,5 @@ router.get("/myfav", async (req, res) => {
         });
     }
 });
-
-// แปลงสตริงคั่นด้วยลูกน้ำ (เช่น "17,3") เป็นอาเรย์ของตัวเลข
-function parseIdList(rawParam) {
-    if (!rawParam) return [];
-    return rawParam.split(",").map(Number).filter(Boolean);
-}
 
 export default router;

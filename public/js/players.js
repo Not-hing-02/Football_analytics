@@ -12,19 +12,8 @@ const teamFilter = document.getElementById("team-filter");
 const favoritesButton = document.getElementById("favorites-filter");
 const emptyMessage = document.getElementById("no-players");
 
-const storageKey = "football.players.favorites.v1";
-let favorites = new Set(["Erling Haaland", "Mohamed Salah"]);
 let showFavoritesOnly = false;
-
-// อ่านรายชื่อที่เคยกดหัวใจไว้ในเบราว์เซอร์
-try {
-    const stored = JSON.parse(localStorage.getItem(storageKey));
-    if (Array.isArray(stored)) {
-        favorites = new Set(stored);
-    }
-} catch {
-    // ถ้าเบราว์เซอร์ปิดพื้นที่จัดเก็บ ยังใช้หัวใจได้ระหว่างเปิดหน้านี้
-}
+document.addEventListener("favoriteschange", renderPlayers);
 
 // เติมตัวเลือกในช่อง Position และ Team จากข้อมูลนักเตะ
 function addFilterOptions(select, field) {
@@ -180,34 +169,9 @@ function addPlayerRow(player) {
     </svg>
 `;
 
-    function updateHeart() {
-        heart.setAttribute(
-            "aria-pressed",
-            String(favorites.has(player.name))
-        );
-    }
-
-    updateHeart();
-    heart.addEventListener("click", () => {
-        if (favorites.has(player.name)) {
-            favorites.delete(player.name);
-        } else {
-            favorites.add(player.name);
-        }
-
-        try {
-            localStorage.setItem(storageKey, JSON.stringify([...favorites]));
-        } catch {
-            // ยังเก็บรายการในหน่วยความจำได้จนกว่าจะปิดหน้า
-        }
-
-        updateHeart();
-
-        if (showFavoritesOnly) {
-            renderPlayers();
-            favoritesButton.focus();
-        }
-    });
+    heart.dataset.favType = "players";
+    heart.dataset.favId = player.id;
+    heart.setAttribute("aria-pressed", String(favoriteIds.players.has(Number(player.id))));
 
     row.insertCell().append(heart);
 }
@@ -226,7 +190,7 @@ function renderPlayers() {
             && searchText.includes(headerQuery)
             && (!positionFilter.value || player.position === positionFilter.value)
             && (!teamFilter.value || player.team === teamFilter.value)
-            && (!showFavoritesOnly || favorites.has(player.name));
+            && (!showFavoritesOnly || favoriteIds.players.has(Number(player.id)));
     });
 
     const totalPlayers = visiblePlayers.length;

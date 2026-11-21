@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/dashboard-page.css">
     <script src="js/main-app.js" defer></script>
     <script src="js/dashboard-app.js" defer></script>
     <title>Premier League</title>
 </head>
+
 <body>
     <div class="container">
         <!-- Sidebar Navigation -->
@@ -32,7 +36,7 @@
                     <li><a href="my_fav.html">My Favorites</a></li>
                 </ul>
             </div>
-            <div class="bottom-nav">
+            <div class="bottom-nav" hidden>
                 <button type="button" class="btn-logout">
                     <img src="assets/logout.svg" alt="icon-logout">
                     Log out
@@ -152,40 +156,44 @@
 
                     <!-- Bottom Section: My Favorites -->
                     <section class="bottom-section">
-                        <div class="panel-card favorite-teams">
-                            <div class="fav-teams-panel">
-                                <div class="panel-header">
-                                    <h3>My favorite</h3>
-                                    <a href="my_fav.html" class="see-more" hidden>See more</a>
+                            <div class="panel-card favorite-teams is-locked" id="dashboard-favorites">
+                                <div class="favorites-lock">
+                                    <a href="/login.html">Log in to view your favorites</a>
                                 </div>
-                                <!-- Empty / Unauthenticated State Overlay -->
-                                <div class="state-message with-blur" hidden id="fav-state">
-                                    <p class="message">No favorite team yet</p>
-                                    <p class="submessage">
-                                        Heart your favorite teams to track their form and stats right here.
-                                        <a href="teams.html" class="btn-browse-teams">+ Browse Teams</a>
-                                    </p>
+                                <div class="fav-teams-panel">
+                                    <div class="panel-header">
+                                        <h3>My favorite</h3>
+                                        <a href="my_fav.html" class="see-more" hidden>See more</a>
+                                    </div>
+                                    <!-- Empty / Unauthenticated State Overlay -->
+                                    <div class="state-message with-blur" hidden id="fav-state">
+                                        <p class="message">No favorites yet</p>
+                                        <p class="submessage">
+                                            Heart your favorite teams to track their form and stats right here.
+                                            <a href="teams.html" class="btn-browse-teams">+ Browse Teams</a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- Favorite Teams Cards -->
+                                <div class="fav-teams-list" hidden id="favorite-teams-list">
+                                    <div class="team-col">
+                                        <img src="assets/img.jpg" alt="team-photo">
+                                        <p class="team-name">name team</p>
+                                        <p class="overview-result">
+                                            <span class="win">W99</span>
+                                            <span>/</span>
+                                            <span class="draw">D99</span>
+                                            <span>/</span>
+                                            <span class="lose">L99</span>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                            <!-- Favorite Teams Cards -->
-                            <div class="fav-teams-list" hidden id="favorite-teams-list">
-                                <div class="team-col">
-                                    <img src="assets/img.jpg" alt="team-photo">
-                                    <p class="team-name">name team</p>
-                                    <p class="overview-result">
-                                        <span class="win">W99</span>
-                                        <span>/</span>
-                                        <span class="draw">D99</span>
-                                        <span>/</span>
-                                        <span class="lose">L99</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
                     </section>
                 </div>
             </main>
         </div>
     </div>
 </body>
+
 </html>

@@ -13,6 +13,8 @@ import myfavRouter from "./routes/myfav.mjs";
 import searchRouter from "./routes/search.mjs";
 import standingRouter from "./routes/standing.mjs";
 
+import authRouter from "./routes/auth.mjs";
+
 const app = express();
 const port = Number(process.env.PORT || 3000);
 
@@ -20,6 +22,7 @@ const publicDirectory = fileURLToPath(
     new URL("./public/", import.meta.url)
 );
 
+app.use("/api/auth", authRouter);
 app.use(express.json());
 app.use(express.static(publicDirectory));
 

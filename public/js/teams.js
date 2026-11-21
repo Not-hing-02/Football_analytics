@@ -1,8 +1,6 @@
 let teams;
 let favoritesOnly = false;
-let savedTeams = new Set();
 
-const favoritesKey = "football.teams.favorites.v1";
 const grid = document.getElementById("team-grid");
 const cardTemplate = document.getElementById("team-card-template");
 const dialog = document.getElementById("team-dialog");
@@ -15,14 +13,9 @@ const stadiumFilter = document.getElementById("stadium-filter");
 const cityFilter = document.getElementById("city-filter");
 const favoritesFilter = document.getElementById("team-favorites");
 
-try {
-    const stored = JSON.parse(localStorage.getItem(favoritesKey));
-    if (Array.isArray(stored)) {
-        savedTeams = new Set(stored.map(Number));
-    }
-} catch {
-    // Favorites remain available for this visit.
-}
+document.addEventListener("favoriteschange", () => {
+    if (teams) renderTeams();
+});
 
 function fillOptions(select, values, placeholder) {
     select.replaceChildren(new Option(placeholder, ""));
@@ -90,28 +83,9 @@ function createTeamCard(team) {
 
     const heart = card.querySelector(".team-heart");
     heart.setAttribute("aria-label", `Favorite ${team.name}`);
-    heart.setAttribute("aria-pressed", String(savedTeams.has(team.id)));
-
-    heart.addEventListener("click", () => {
-        if (savedTeams.has(team.id)) {
-            savedTeams.delete(team.id);
-        } else {
-            savedTeams.add(team.id);
-        }
-
-        try {
-            localStorage.setItem(favoritesKey, JSON.stringify([...savedTeams]));
-        } catch {
-            // Keep favorites in memory for this visit.
-        }
-
-        heart.setAttribute("aria-pressed", String(savedTeams.has(team.id)));
-
-        if (favoritesOnly) {
-            renderTeams();
-            favoritesFilter.focus();
-        }
-    });
+    heart.dataset.favType = "teams";
+    heart.dataset.favId = team.id;
+    heart.setAttribute("aria-pressed", String(favoriteIds.teams.has(Number(team.id))));
 
     return card;
 }
@@ -134,7 +108,7 @@ function renderTeams() {
             && searchable.includes(generalQuery)
             && (!stadiumFilter.value || team.stadium === stadiumFilter.value)
             && (!cityFilter.value || team.city === cityFilter.value)
-            && (!favoritesOnly || savedTeams.has(team.id));
+            && (!favoritesOnly || favoriteIds.teams.has(Number(team.id)));
     });
 
     grid.replaceChildren(...visibleTeams.map(createTeamCard));

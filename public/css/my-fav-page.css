@@ -93,3 +93,10 @@
     font-size: 12px;
     color: #70758A;
 }
+
+.favorite-remove {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}

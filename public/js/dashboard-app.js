@@ -2,7 +2,7 @@
 // 1. เริ่มต้นการทำงานเมื่อโหลดหน้าเว็บ
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-    loadDashboardData(2026); // ดึงข้อมูลฤดูกาล 2026/27
+    Promise.resolve(authReady).then(() => loadDashboardData(2026)); // ดึงข้อมูลฤดูกาล 2026/27
 });
 
 // ==========================================
@@ -26,7 +26,7 @@ async function loadDashboardData(seasonId) {
         renderKpis(data.kpis);
         renderRecentMatches(data.recent_matches);
         renderTopScorers(data.top_scorers);
-        renderFavoriteTeams(data.favorite_teams);
+        renderFavoriteTeams(data.favorite_teams, data.favorite_players);
     } catch (error) {
         console.error("Error connecting to API:", error);
     }
@@ -98,31 +98,14 @@ function renderTopScorers(scorers) {
 }
 
 // แสดงส่วนทีมโปรด (รองรับ 3 สถานะ: ยังไม่ล็อกอิน / ไม่มีทีมโปรด / มีทีมโปรด)
-function renderFavoriteTeams(favoriteTeams) {
+function renderFavoriteTeams(favoriteTeams, favoritePlayers) {
     const favContainer = document.getElementById("favorite-teams-list");
     const favState = document.getElementById("fav-state");
     const seeMoreBtn = document.querySelector(".favorite-teams .see-more");
 
     if (!favContainer) return;
 
-    currentUser = true;
-
-    // กรณีที่ 1: ผู้ใช้ยังไม่ได้เข้าสู่ระบบ
-    if (!currentUser) {
-        favState.classList.add("with-blur");
-        favState.innerHTML = `
-            <p class="message">Not logged in </p>
-            <p class="submessage">
-                Please <a href="login.html">log in</a> to use this feature
-            </p>
-        `;
-        favState.hidden = false;
-        favContainer.hidden = true;
-        return;
-    }
-
-    // กรณีที่ 2: เข้าสู่ระบบแล้ว แต่ยังไม่มีทีมโปรดที่บันทึกไว้
-    if (!favoriteTeams || favoriteTeams.length === 0) {
+    if (favoriteTeams.length === 0 && favoritePlayers.length === 0) {
         favState.hidden = false;
         favContainer.hidden = true;
         return;
@@ -142,6 +125,12 @@ function renderFavoriteTeams(favoriteTeams) {
                 <span>/</span>
                 <span class="lose">L${team.losses}</span>
             </p>
+        </div>
+    `).join("") + favoritePlayers.map((player) => `
+        <div class="team-col">
+            <img src="assets/img.jpg" alt="">
+            <p class="team-name">${player.display_name || player.player_name}</p>
+            <p class="overview-result">${player.team_name}</p>
         </div>
     `).join("");
 

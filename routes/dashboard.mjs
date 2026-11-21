@@ -1,3 +1,6 @@
+import { sessionUser } from "./auth.mjs";
+import { readFavorites } from "./favorites.mjs";
+import { FAVORITE_PLAYERS_QUERY } from "./myfav.mjs";
 import express from "express";
 import pool from "../db.mjs";
 
@@ -93,18 +96,18 @@ const FAV_TEAMS_QUERY = `
 // ==========================================
 router.get("/dashboard", async (req, res) => {
     const seasonId = parseInt(req.query.season, 10) || 2026;
-    const favTeamIds = req.query.favTeams
-        ? req.query.favTeams.split(",").map(Number)
-        : [17];
+    res.set("Cache-Control", "no-store");
+    const { teams: favTeamIds, players: favPlayerIds } = readFavorites(sessionUser(req)?.id);
 
     try {
         // รัน Query ทั้งหมดพร้อมกันเพื่อลดเวลาการรอ Response
-        const [seasonRes, kpiRes, matchesRes, scorersRes, favRes] = await Promise.all([
+        const [seasonRes, kpiRes, matchesRes, scorersRes, favRes, favPlayersRes] = await Promise.all([
             pool.query(SEASON_QUERY, [seasonId]),
             pool.query(KPI_QUERY, [seasonId]),
             pool.query(RECENT_MATCHES_QUERY, [seasonId]),
             pool.query(TOP_SCORERS_QUERY, [seasonId]),
-            pool.query(FAV_TEAMS_QUERY, [seasonId, favTeamIds])
+            pool.query(FAV_TEAMS_QUERY, [seasonId, favTeamIds]),
+            pool.query(FAVORITE_PLAYERS_QUERY, [seasonId, favPlayerIds])
         ]);
 
         const seasonLabel = seasonRes.rows[0]?.label || null;
@@ -122,7 +125,8 @@ router.get("/dashboard", async (req, res) => {
             },
             recent_matches: matchesRes.rows,
             top_scorers: scorersRes.rows,
-            favorite_teams: favRes.rows
+            favorite_teams: favRes.rows,
+            favorite_players: favPlayersRes.rows
         });
     } catch (error) {
         console.error("Dashboard API Error:", error);

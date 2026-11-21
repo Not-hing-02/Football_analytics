@@ -161,29 +161,70 @@ function renderMetricValue(player, slot, value, metric, scale, noteId) {
 }
 
 function renderComparison(data) {
-    const stats = selected.map((player) => data.players.find(({ id }) => id === player.id).metrics);
+    const results = selected.map((player) =>
+        data.players.find(({ id }) => id === player.id)
+    );
     const notes = [];
+
+    const estimatedPlayers = selected.filter(
+        (_, index) => results[index].ratingKind === "estimated"
+    );
+
+    if (estimatedPlayers.length) {
+        const names = estimatedPlayers.map(({ name }) => name).join(" / ");
+        notes.push(compareNode(
+            "p", "",
+            `${names} — เรตติ้งเป็นค่าประมาณตามสูตรหน้า Players`
+        ));
+    }
+
+    results.forEach(({ coverage }, index) => {
+        if (!coverage) return;
+        const { matches, shots, shotsOnTarget, passes } = coverage;
+        if (shots === matches && shotsOnTarget === matches && passes === matches) return;
+
+        notes.push(compareNode(
+            "p", "",
+            `${selected[index].name} — มีข้อมูลยิง ${shots}/${matches} นัด ` +
+            `ยิงตรงกรอบ ${shotsOnTarget}/${matches} นัด และจ่ายบอล ${passes}/${matches} นัด`
+        ));
+    });
+
     const rows = metricDefinitions.map((metric) => {
-        const values = stats.map((metrics) => metrics[metric.key]);
-        // ใช้สเกลเดียวกันทั้งสองฝั่งเพื่อให้ความยาวแท่งสะท้อนสัดส่วนของค่าจริง
+        const values = results.map(({ metrics }) => metrics[metric.key]);
         const scale = metric.max ?? Math.max(1, ...values.filter((value) => value != null));
         const noteId = `compare-note-${metric.key}`;
-        if (values.some((value) => value == null)) {
-            const note = compareNode("p", "", metric.reason);
+        const definition = metric.key === "passAccuracy"
+            ? {
+                ...metric,
+                reason: "ต้องมีข้อมูลการจ่ายครบทุกนัด และมีการพยายามจ่ายอย่างน้อยหนึ่งครั้ง",
+            }
+            : metric;
+
+        if (values.some((value) => value == null) && definition.reason) {
+            const note = compareNode("p", "", definition.reason);
             note.id = noteId;
             notes.push(note);
         }
+
         const row = compareNode("section", "compare-metric");
-        const heading = compareNode("h3", "", metric.label);
+        const headingText = metric.key === "averageRating" && estimatedPlayers.length
+            ? "Average Rating (มีค่าประมาณ)"
+            : metric.label;
+        const heading = compareNode("h3", "", headingText);
         heading.id = `compare-metric-${metric.key}`;
         row.setAttribute("aria-labelledby", heading.id);
+
         row.append(heading, ...values.map((value, slot) =>
-            renderMetricValue(selected[slot], slot, value, metric, scale, noteId)));
+            renderMetricValue(selected[slot], slot, value, definition, scale, noteId)
+        ));
         return row;
     });
+
     compareElement("metrics").replaceChildren(...rows);
-    compareElement("notes").replaceChildren(...notes);
-    compareElement("notes").hidden = !notes.length;
+    const notesElement = compareElement("notes");
+    notesElement.replaceChildren(...notes);
+    notesElement.hidden = notes.length === 0;
     compareResults.hidden = false;
 }
 

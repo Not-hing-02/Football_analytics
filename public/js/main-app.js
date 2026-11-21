@@ -30,9 +30,9 @@ let currentUser = null; // เก็บข้อมูลผู้ใช้ป�
 
 // เช็ก Session/Token จาก Backend เมื่อโหลดหน้าเว็บ
 async function checkStatusLogin() {
-    const authGuestEl = document.getElementById("auth-guest");   // ปุ่ม Login / Register
-    const authMemberEl = document.getElementById("auth-member"); // ข้อมูลโปรไฟล์มุมขวาบน
-    const logoutBtnEl = document.getElementById("logout-btn");   // ปุ่ม Log out ล่างซ้าย
+    const authGuestEl = document.getElementById("btn-login");   // ปุ่ม Login / Register
+    const authMemberEl = document.querySelector(".profile"); // ข้อมูลโปรไฟล์มุมขวาบน
+    const logoutBtnEl = document.querySelector(".btn-logout");   // ปุ่ม Log out ล่างซ้าย
 
     try {
         const res = await fetch("/api/auth/me", {
@@ -43,17 +43,18 @@ async function checkStatusLogin() {
         if (res.ok) {
             const data = await res.json();
             currentUser = data.user;
+            document.getElementById("dashboard-favorites")?.classList.remove("is-locked");
 
             // อัปเดต UI สำหรับสมาชิกที่ล็อกอินแล้ว
             if (authMemberEl) {
-                const nameEl = authMemberEl.querySelector(".user-name");
-                const roleEl = authMemberEl.querySelector(".user-role");
+                const nameEl = authMemberEl.querySelector(".name");
+                const roleEl = authMemberEl.querySelector(".role");
                 if (nameEl) nameEl.textContent = currentUser.name;
                 if (roleEl) roleEl.textContent = currentUser.role || "Member";
-                authMemberEl.style.display = "flex";
+                authMemberEl.hidden = false;
             }
             if (authGuestEl) authGuestEl.style.display = "none";
-            if (logoutBtnEl) logoutBtnEl.style.display = "flex";
+            if (logoutBtnEl) logoutBtnEl.closest(".bottom-nav").hidden = false;
 
             // โหลดรายการโปรดจาก Database (หากหน้านั้นมีฟังก์ชัน loadFavorites)
             if (typeof loadFavorites === "function") {
@@ -78,11 +79,11 @@ async function checkStatusLogin() {
 function handleGuestState(authGuestEl, authMemberEl, logoutBtnEl) {
     currentUser = null;
     if (authGuestEl) authGuestEl.style.display = "flex";
-    if (authMemberEl) authMemberEl.style.display = "none";
-    if (logoutBtnEl) logoutBtnEl.style.display = "none";
+    if (authMemberEl) authMemberEl.hidden = true;
+    if (logoutBtnEl) logoutBtnEl.closest(".bottom-nav").hidden = true;
 
     // หากอยู่หน้า My Favorites โดยไม่ได้ล็อกอิน ให้ส่งกลับไปหน้า Login
-    if (window.location.pathname.includes("my_fav.html")) {
+    if (window.location.pathname === "/my_fav.html") {
         window.location.href = "/login.html";
     }
 }
@@ -104,47 +105,87 @@ async function handleLogout() {
 // ==========================================
 // 3. ระบบจัดการรายการโปรด (Favorites)
 // ==========================================
-const FAV_STORAGE_KEY = {
-    teams: "pl_fav_teams",
-    players: "pl_fav_players"
-};
+const favoriteIds = { teams: new Set(), players: new Set() };
+let authReady;
 
-// อ่านรายการ ID ที่บันทึกไว้จาก localStorage (ค่าเริ่มต้นทีมคือ [17] Nottingham Forest)
-function getFavorites(type) {
-    const raw = localStorage.getItem(FAV_STORAGE_KEY[type]);
-    if (!raw) {
-        const defaultData = type === "teams" ? [17] : [];
-        localStorage.setItem(FAV_STORAGE_KEY[type], JSON.stringify(defaultData));
-        return defaultData;
+async function importBrowserFavorites() {
+    const teamKey = "football.teams.favorites.v1";
+    const playerKey = "football.players.favorites.v1";
+    const teamIds = JSON.parse(localStorage.getItem(teamKey) || "[]");
+    const playerNames = JSON.parse(localStorage.getItem(playerKey) || "[]");
+    if (!teamIds.length && !playerNames.length) return;
+    if (!confirm("Import favorites saved in this browser into the signed-in account?")) return;
+
+    let playerIds = [];
+    if (playerNames.length) {
+        const response = await fetch("/api/players");
+        if (!response.ok) throw new Error("Could not look up saved players.");
+        const players = await response.json();
+        playerIds = players.filter((player) =>
+            playerNames.includes(player.name)
+            && players.filter((entry) => entry.name === player.name).length === 1
+        ).map((player) => player.id);
     }
-    return JSON.parse(raw);
+
+    for (const [type, ids] of [["teams", teamIds], ["players", playerIds]]) {
+        for (const id of new Set(ids.map(Number))) {
+            if (!Number.isInteger(id) || id <= 0 || id > 2147483647) continue;
+            const response = await fetch(`/api/favorites/${type}/${id}`, { method: "PUT" });
+            if (!response.ok) throw new Error("Could not import favorites.");
+        }
+    }
+    localStorage.removeItem(teamKey);
+    if (playerIds.length === playerNames.length) localStorage.removeItem(playerKey);
+    else alert("Some saved player names could not be matched. You can add them from Players.");
 }
 
-// อัปเดตสีและไอคอนของปุ่มหัวใจบนหน้าจอ
-function updateHeartUI(btnElement, isFav) {
-    btnElement.classList.toggle("active", isFav);
-    btnElement.style.color = isFav ? "#ef4444" : "#9ca3af";
-    btnElement.innerHTML = isFav ? "&#10084;" : "&#9825;"; // ❤ หรือ ♡
-    btnElement.title = isFav ? "Remove from favorites" : "Add to favorites";
+async function loadFavoriteIds() {
+    try {
+        await importBrowserFavorites();
+    } catch (error) {
+        console.error("Could not import older favorites:", error);
+    }
+    try {
+        const response = await fetch("/api/favorites");
+        if (!response.ok) return;
+        const data = await response.json();
+        for (const type of ["teams", "players"]) {
+            favoriteIds[type] = new Set(data[type].map(Number));
+        }
+        document.dispatchEvent(new Event("favoriteschange"));
+    } catch (error) {
+        console.error("Could not load favorites:", error);
+    }
 }
 
-// เพิ่มหรือลบ ID ออกจากรายการโปรด คืนค่าเป็นสถานะล่าสุด (true = เพิ่ม, false = ลบ)
-function toggleFavorite(type, id, btnElement = null) {
-    const numId = Number(id);
-    let favList = getFavorites(type);
-    const exists = favList.includes(numId);
-
-    favList = exists
-        ? favList.filter((item) => item !== numId)
-        : [...favList, numId];
-
-    localStorage.setItem(FAV_STORAGE_KEY[type], JSON.stringify(favList));
-
-    const isNowFav = !exists;
-    if (btnElement) {
-        updateHeartUI(btnElement, isNowFav);
+async function toggleFavorite(type, id, button) {
+    if (button.disabled) return;
+    button.disabled = true;
+    try {
+        await authReady;
+        if (!currentUser) {
+            window.location.assign("/login.html");
+            return;
+        }
+        const itemId = Number(id);
+        const response = await fetch(`/api/favorites/${type}/${itemId}`, {
+            method: favoriteIds[type].has(itemId) ? "DELETE" : "PUT"
+        });
+        if (response.status === 401) {
+            window.location.assign("/login.html");
+            return;
+        }
+        if (!response.ok) throw new Error("Favorite update failed.");
+        const { isFav } = await response.json();
+        if (isFav) favoriteIds[type].add(itemId);
+        else favoriteIds[type].delete(itemId);
+        document.dispatchEvent(new Event("favoriteschange"));
+    } catch (error) {
+        console.error(error);
+        alert("Could not save this favorite. Please try again.");
+    } finally {
+        button.disabled = false;
     }
-    return isNowFav;
 }
 
 // ==========================================
@@ -152,10 +193,10 @@ function toggleFavorite(type, id, btnElement = null) {
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     initSearch();
-    checkStatusLogin();
+    authReady = checkStatusLogin().then(() => currentUser && loadFavoriteIds());
 
     // ผูก Event ปุ่มออกจากระบบ
-    const logoutBtn = document.getElementById("logout-btn");
+    const logoutBtn = document.querySelector(".btn-logout");
     if (logoutBtn) {
         logoutBtn.addEventListener("click", (e) => {
             e.preventDefault();
@@ -164,27 +205,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// Event Delegation: ดักจับการคลิกปุ่มหัวใจ ([data-fav-id]) ทุกปุ่มในหน้าเว็บ
-document.addEventListener("click", (e) => {
-    const favBtn = e.target.closest("[data-fav-id]");
-    if (!favBtn) return;
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    // ตรวจสอบการล็อกอินก่อนอนุญาตให้กดหัวใจ
-    if (!currentUser) {
-        alert("กรุณาเข้าสู่ระบบก่อนบันทึกรายการโปรด");
-        window.location.href = "/login.html";
-        return;
-    }
-
-    const { favType, favId, removeCard } = favBtn.dataset;
-    const isNowFav = toggleFavorite(favType, favId, favBtn);
-
-    // หากกดเอาออกในหน้า My Favorites ให้ลบการ์ดนั้นออกจากหน้าจอทันที
-    if (!isNowFav && removeCard === "true") {
-        const card = favBtn.closest(".fav-card, .team-card, .player-card");
-        if (card) card.remove();
-    }
+document.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-fav-id]");
+    if (!button) return;
+    event.preventDefault();
+    toggleFavorite(button.dataset.favType, button.dataset.favId, button);
 });

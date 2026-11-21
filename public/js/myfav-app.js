@@ -16,7 +16,7 @@ const HEART_ICON_SVG = `
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     setupFilterTabs();
-    loadMyFavorites(2026);
+    document.addEventListener("favoriteschange", () => loadMyFavorites(2026));
 });
 
 // ตั้งค่าปุ่มสลับแท็บ Favorite Teams / Favorite Players
@@ -37,11 +37,8 @@ function setupFilterTabs() {
 // 3. ดึงข้อมูลรายการโปรดจาก Backend API
 // ==========================================
 async function loadMyFavorites(seasonId) {
-    const teamIds = getFavorites("teams");
-    const playerIds = getFavorites("players");
-
     try {
-        const url = `/api/myfav?season=${seasonId}&teams=${teamIds.join(",")}&players=${playerIds.join(",")}`;
+        const url = `/api/myfav?season=${seasonId}`;
         const response = await fetch(url);
         const data = await response.json();
 
@@ -77,9 +74,9 @@ function renderFavoriteTeams(teams) {
 
     return teams.map((team) => `
         <div class="fav-card team" data-id="${team.team_id}">
-            <span data-fav-type="teams" data-fav-id="${team.team_id}" data-remove-card="true">
+            <button type="button" class="favorite-remove" aria-label="Remove favorite team" data-fav-type="teams" data-fav-id="${team.team_id}">
                 ${HEART_ICON_SVG}
-            </span>
+            </button>
             <img class="fav-photo" src="assets/img.jpg" alt="${team.team_name}">
             <div class="info team">
                 <p class="team-name">${team.team_name}</p>
@@ -97,9 +94,9 @@ function renderFavoritePlayers(players) {
 
     return players.map((player) => `
         <div class="fav-card player" data-id="${player.player_id}">
-            <span data-fav-type="players" data-fav-id="${player.player_id}" data-remove-card="true">
+            <button type="button" class="favorite-remove" aria-label="Remove favorite player" data-fav-type="players" data-fav-id="${player.player_id}">
                 ${HEART_ICON_SVG}
-            </span>
+            </button>
             <img class="fav-photo" src="assets/img.jpg" alt="${player.display_name}">
             <div class="info player">
                 <p class="player-name">${player.display_name}</p>
