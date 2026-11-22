@@ -1,0 +1,400 @@
+.content-wrapper {
+    min-width: 0;
+    background: #f6f7fb;
+    color: #181a2b;
+}
+
+.matches-page {
+    padding-bottom: 30px;
+}
+
+.match-filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 12px 0 22px;
+}
+
+.match-filters input,
+.match-filters select,
+.match-pagination button,
+#match-retry,
+#match-dialog button {
+    padding: 10px 14px;
+    min-height: 40px;
+    border: 1px solid #d9ddea;
+    border-radius: 9px;
+    background: white;
+    color: #626a80;
+    font: inherit;
+    font-size: 13px;
+}
+
+.match-filters input {
+    flex: 1 1 220px;
+}
+
+.match-filters select {
+    max-width: 230px;
+    cursor: pointer;
+}
+
+.matches-scroll {
+    overflow-x: auto;
+}
+
+.match-caption {
+    padding: 0 0 12px;
+    color: #71788e;
+    font-size: 12px;
+    text-align: left;
+}
+
+.matches-table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    font-size: 14px;
+}
+
+.matches-table th {
+    padding: 8px 12px;
+    text-align: left;
+    color: #71788e;
+    font-size: 12px;
+}
+
+.matches-table td {
+    padding: 18px 12px;
+    background: white;
+}
+
+.matches-table td:first-child {
+    border-radius: 9px 0 0 9px;
+}
+
+.matches-table td:last-child {
+    border-radius: 0 9px 9px 0;
+}
+
+.matches-table th:nth-child(3),
+.matches-table td:nth-child(3) {
+    text-align: center;
+}
+
+.match-score {
+    display: inline-block;
+    min-width: 66px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    background: #f0eafa;
+    color: #5b27b6;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.match-status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    background: #f0f1f5;
+    color: #626a80;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.match-status.completed {
+    background: #e9f7ee;
+    color: #237b42;
+}
+
+.match-status.live {
+    background: #fff0f0;
+    color: #b72f3e;
+}
+
+.match-details {
+    padding: 8px 12px;
+    border: 1px solid #d9ddea;
+    border-radius: 8px;
+    background: white;
+    color: #5b27b6;
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.match-details:hover {
+    background: #f5f0ff;
+    border-color: #5b27b6;
+}
+
+.match-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+    font-size: 13px;
+}
+
+.match-pagination button,
+#match-retry {
+    cursor: pointer;
+}
+
+.match-pagination button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+#match-message {
+    margin: 16px 0;
+    color: #626a80;
+}
+
+#match-dialog {
+    width: min(560px, 94vw);
+    max-height: 88vh;
+    overflow-y: auto;
+    margin: auto;
+    padding: 28px;
+    border: 1px solid #d9ddea;
+    border-radius: 16px;
+    color: #181a2b;
+}
+
+#match-dialog h2 {
+    font-size: 20px;
+}
+
+#match-dialog::backdrop {
+    background: rgb(16 17 40 / 55%);
+}
+
+#match-detail-info {
+    margin: 12px 0 20px;
+    color: #626a80;
+    line-height: 1.6;
+}
+
+.match-stats {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 22px;
+    font-size: 14px;
+}
+
+.match-stats th,
+.match-stats td {
+    padding: 12px 6px;
+    border-bottom: 1px solid #e3e5ed;
+    text-align: center;
+}
+
+.match-stats th {
+    color: #71788e;
+    font-size: 12px;
+}
+
+#match-dialog button {
+    background: #5b27b6;
+    color: white;
+    cursor: pointer;
+}
+
+.matches-page :is(button, select, input):focus-visible {
+    outline: 2px solid #9272e1;
+    outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .navigator {
+        width: 100%;
+    }
+
+    .nav-links {
+        flex-direction: row;
+        overflow-x: auto;
+    }
+
+    .nav-links a {
+        white-space: nowrap;
+    }
+
+    .header {
+        height: auto;
+        padding-top: 18px;
+        padding-bottom: 18px;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .right-header #search {
+        width: 150px;
+    }
+}
+
+.match-tabs {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 5px;
+    border: 1px solid #e0dcec;
+    border-radius: 12px;
+    background: #eeeaf5;
+}
+
+.match-filters .match-tabs button {
+    min-height: 38px;
+    padding: 9px 16px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #666279;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.match-filters .match-tabs button:hover {
+    background: #e2daef;
+}
+
+.match-filters .match-tabs button[aria-pressed="true"] {
+    background: #5b27b6;
+    color: white;
+    box-shadow: 0 2px 5px rgb(70 35 130 / 15%);
+}
+
+/* ชื่อทีมสองฝั่งใช้พื้นที่เท่ากัน */
+.matches-table th:nth-child(2),
+.matches-table th:nth-child(4) {
+    width: 24%;
+}
+
+body .matches-table th:nth-child(2),
+body .matches-table td:nth-child(2) {
+    text-align: right;
+    padding-right: 24px;
+}
+
+body .matches-table th:nth-child(3),
+body .matches-table td:nth-child(3) {
+    text-align: center;
+    vertical-align: middle;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+body .matches-table th:nth-child(4),
+body .matches-table td:nth-child(4) {
+    text-align: left;
+    padding-left: 24px;
+}
+
+.matches-table .match-score {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 66px;
+    min-height: 42px;
+    margin: 0;
+}
+
+.match-filters {
+    display: grid;
+    grid-template-columns: minmax(200px, 1fr) 140px 220px;
+    align-items: center;
+    gap: 16px;
+}
+
+/* ให้ช่องค้นหา ฤดูกาล และทีมอยู่แถวแรก */
+.match-filter-fields {
+    display: contents;
+}
+
+.match-filters #match-search {
+    width: 100%;
+    min-width: 0;
+}
+
+.match-filters #match-season,
+.match-filters #match-team {
+    width: 100%;
+    max-width: none;
+}
+
+/* ย้ายปุ่มลงแถวที่สอง ชิดซ้าย */
+.match-filters .match-tabs {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: start;
+    width: fit-content;
+    max-width: 100%;
+}
+
+@media (max-width: 650px) {
+    .match-filters {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .match-filters #match-search {
+        grid-column: 1 / -1;
+    }
+
+    .match-filters .match-tabs {
+        grid-row: 3;
+    }
+}
+
+.match-pagination button {
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease;
+}
+
+.match-pagination button:hover:not(:disabled) {
+    background: #5b27b6;
+    border-color: #5b27b6;
+    color: white;
+}
+
+.match-pagination button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.match-pagination button:focus-visible {
+    outline: 2px solid #9272e1;
+    outline-offset: 3px;
+}.match-pagination button {
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease;
+}
+
+.match-pagination button:hover:not(:disabled) {
+    background: #5b27b6;
+    border-color: #5b27b6;
+    color: white;
+}
+
+.match-pagination button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.match-pagination button:focus-visible {
+    outline: 2px solid #9272e1;
+    outline-offset: 3px;
+}

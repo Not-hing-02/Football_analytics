@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/search-page.css">
+    <script src="js/main-app.js" defer></script>
+    <script src="js/search-app.js" defer></script>
+    <title>Search · Premier League</title>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="navigator">
+            <div class="top-nav">
+                <div class="brand">
+                    <span class="brand-title">Premier League</span>
+                    <span class="brand-subtitle">Analytics</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Dashboard</a></li>
+                    <li><a href="teams.html">Teams</a></li>
+                    <li><a href="players.html">Players</a></li>
+                    <li><a href="matches.html">Matches</a></li>
+                    <li><a href="analytics.html">Analytics</a></li>
+                    <li><a href="compare.html">Compare</a></li>
+                    <li><a href="standing.html">Standing</a></li>
+                    <li><a href="my_fav.html">My Favorites</a></li>
+                </ul>
+            </div>
+            <div class="bottom-nav" hidden>
+                <button type="button" class="btn-logout">
+                    <img src="assets/logout.svg" alt="icon-logout">
+                    Log out
+                </button>
+            </div>
+        </nav>
+
+        <!-- Content Area -->
+        <div class="content-wrapper">
+            <header class="header">
+                <div class="left-header">
+                    <h1>Search</h1>
+                </div>
+
+                <div class="right-header">
+                    <div class="profile" hidden>
+                        <div class="photo-profile">
+                            <img src="assets/img.jpg" alt="photo">
+                        </div>
+                        <div class="info-profile">
+                            <p class="name">Username</p>
+                            <p class="role">member</p>
+                        </div>
+                    </div>
+                    <a href="login.html" id="btn-login">Log in</a>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <!-- Main Content -->
+            <main class="main">
+                <div class="main-content">
+                    <!-- Search Input Form -->
+                    <form action="search.html" method="GET" class="search-form" novalidate>
+                        <div class="search-bar-group">
+                            <input type="search" name="q" id="search" placeholder="Search" minlength="2" maxlength="50" required>
+                            <button type="submit" class="btn-search">Search</button>
+                        </div>
+                        <p class="search-hint">Search by team, player name or match (2–50 characters).</p>
+                    </form>
+
+                    <!-- Category Filter Tabs & Season Selector -->
+                    <div class="filter-bar">
+                        <div class="filter-tabs" role="tablist">
+                            <button type="button" class="tab-btn active" data-filter="all">All (0)</button>
+                            <button type="button" class="tab-btn" data-filter="teams">Teams (0)</button>
+                            <button type="button" class="tab-btn" data-filter="players">Players (0)</button>
+                            <button type="button" class="tab-btn" data-filter="matches">Matches (0)</button>
+                        </div>
+
+                        <div class="season-filter">
+                            <label for="season-select">Season</label>
+                            <select id="season-select" name="season">
+                                <option value="all">All seasons</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Search Results Section -->
+                    <div class="result-content">
+                        <h3 class="result-title" id="result-heading">Enter a keyword to search</h3>
+
+                        <div class="state-message" id="search-state" hidden>
+                            No results found. Try searching for another team, player, or match.
+                        </div>
+
+                        <!-- Result Categories (แสดงผลผ่าน JS) -->
+                        <div class="result-list" id="search-result-list"></div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

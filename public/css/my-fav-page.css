@@ -1,0 +1,96 @@
+/* ================= Main Layout ================= */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding-bottom: 30px;
+    color: #171A29;
+}
+
+/* ================= Filter Tabs ================= */
+.filter-tabs {
+    display: flex;
+    gap: 15px;
+}
+
+.filter-tabs .tab-btn {
+    width: 145px;
+    height: 35px;
+    border-radius: 10px;
+    border: 1px solid #DBDEE8;
+    background-color: #FFFFFF;
+    color: #5E6378;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-tabs .tab-btn:not(.active):hover {
+    background-color: #DBDEE8;
+    border: 1px solid #5E6378;
+}
+
+.filter-tabs .tab-btn.active {
+    background-color: #5C26B8;
+    color: #FFFFFF;
+}
+
+.tab-btn:focus-visible {
+    outline: 2px solid #5E6378;
+}
+
+/* ================= Favorite Cards Grid ================= */
+.fav-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
+}
+
+.fav-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 52px 20px 15px;
+    background-color: #FFFFFF;
+    border: 1px solid #DBDEE8;
+    border-radius: 10px;
+}
+
+/* จัดตำแหน่งปุ่มหัวใจมาตรฐาน (.player-heart / .standings-heart จาก layout.css) มุมขวาการ์ด */
+.fav-card .favorite-remove {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+.fav-card .fav-photo {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+/* ================= Card Text Info ================= */
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 4px;
+    min-width: 0;
+}
+
+.info .team-name,
+.info .player-name {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.info .stadium,
+.info .player-detail {
+    font-size: 12px;
+    color: #70758A;
+}

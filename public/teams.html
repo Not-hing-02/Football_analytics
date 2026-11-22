@@ -5,16 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/my-fav-page.css">
     <script src="js/main-app.js" defer></script>
-    <script src="js/myfav-app.js" defer></script>
-    <title>Premier League</title>
+    <link rel="stylesheet" href="css/teams.css">
+    <script src="js/teams.js" defer></script>
+    <title>Teams · Premier League Analytics</title>
 </head>
 <body>
+
     <div class="container">
-        <!-- Sidebar Navigation -->
         <nav class="navigator">
             <div class="top-nav">
                 <div class="brand">
@@ -23,7 +25,7 @@
                 </div>
                 <ul class="nav-links">
                     <li><a href="index.html">Dashboard</a></li>
-                    <li><a href="teams.html" class="active">Teams</a></li>
+                    <li><a href="teams.html" class="active" aria-current="page">Teams</a></li>
                     <li><a href="players.html">Players</a></li>
                     <li><a href="matches.html">Matches</a></li>
                     <li><a href="analytics.html">Analytics</a></li>
@@ -33,27 +35,25 @@
                 </ul>
             </div>
             <div class="bottom-nav" hidden>
-                <a href="#" class="btn-logout">
+                <button type="button" class="btn-logout">
                     <img src="assets/logout.svg" alt="icon-logout">
                     Log out
-                </a>
+                </button>
             </div>
         </nav>
 
-        <!-- Content Area -->
         <div class="content-wrapper">
             <header class="header">
                 <div class="left-header">
                     <h1>Teams</h1>
                 </div>
-
                 <div class="right-header">
                     <form action="search.html" method="GET" class="search-form">
                         <input type="search" name="q" id="search" placeholder="Search">
                     </form>
                     <div class="profile" hidden>
                         <div class="photo-profile">
-                            <img src="assets/img.png" alt="photo">
+                            <img src="assets/img.jpg" alt="photo">
                         </div>
                         <div class="info-profile">
                             <p class="name">Username</p>
@@ -63,13 +63,67 @@
                     <a href="login.html" id="btn-login">Log in</a>
                 </div>
             </header>
-            
             <main class="main">
-                <!-- content -->
+                <div class="team-filters">
+                    <input id="team-search" type="search" placeholder="Search teams..." aria-label="Search teams">
+                    <select id="team-season" aria-label="Season"></select>
+                    <select id="stadium-filter" aria-label="Stadium">
+                        <option value="">All stadiums</option>
+                    </select>
+                    <select id="city-filter" aria-label="City">
+                        <option value="">All cities</option>
+                    </select>
+                    <button id="team-favorites" type="button" aria-pressed="false">
+                        My Favorites
+                    </button>
+                </div>
+
+                <p id="team-status" role="status">กำลังโหลดข้อมูลทีม...</p>
+                <button id="team-retry" type="button" hidden>ลองอีกครั้ง</button>
+
+                <div id="team-grid" class="team-grid"></div>
+
+                <template id="team-card-template">
+                    <article class="team-card">
+                        <div class="team-badge" aria-hidden="true"></div>
+                        <div class="team-card-content">
+                            <h3 class="team-name"></h3>
+                            <p class="team-stadium"></p>
+                            <p class="team-record"></p>
+                            <button class="team-details" type="button" aria-haspopup="dialog">
+                                View details
+                            </button>
+                        </div>
+                        <button class="team-heart standings-heart" type="button" aria-pressed="false">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"/>
+                            </svg>
+                        </button>
+                    </article>
+                </template>
+
+                <dialog id="team-dialog" aria-labelledby="team-detail-name">
+                    <h2 id="team-detail-name"></h2>
+                    <dl class="team-detail-info">
+                        <div>
+                            <dt>Club abbreviation</dt>
+                            <dd id="team-detail-abbreviation"></dd>
+                        </div>
+                        <div>
+                            <dt>Home stadium</dt>
+                            <dd id="team-detail-stadium"></dd>
+                        </div>
+                        <div>
+                            <dt>City</dt>
+                            <dd id="team-detail-city"></dd>
+                        </div>
+                    </dl>
+                    <form method="dialog">
+                        <button type="submit">Close</button>
+                    </form>
+                </dialog>
             </main>
-        
         </div>
-        
     </div>
 </body>
 </html>

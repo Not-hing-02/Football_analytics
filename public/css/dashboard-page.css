@@ -1,0 +1,337 @@
+/* ================= Layout Grid ================= */
+.main-content {
+    display: grid;
+    grid-template-rows: 90px 80px 2fr 1fr;
+    gap: 15px;
+    height: 100%;
+    padding-bottom: 20px;
+    color: #171A29;
+}
+
+.kpi-section {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.middle-section {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 15px;
+}
+
+.bottom-section {
+    display: grid;
+}
+
+/* ================= Hero Banner ================= */
+.hero-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    padding: 0 20px;
+    background-color: #0E1129;
+    border-radius: 10px;
+}
+
+.banner-text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.banner-text h2 {
+    color: #FFFFFF;
+}
+
+.banner-text p {
+    color: #D1D4E5;
+}
+
+.season-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* ================= Shared Panel Card ================= */
+.panel-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 15px 20px;
+    background-color: #FFFFFF;
+    border: 1px solid #DBDEE8;
+    border-radius: 10px;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    color: #0E1129;
+}
+
+.panel-header .see-more {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0E1129;
+    text-decoration: none;
+}
+
+.panel-header .see-more:focus-visible {
+    outline: 1.5px solid #0E1129;
+    border-radius: 5px;
+    outline-offset: 3px;
+}
+
+/* Shared 35px Avatars / Logos */
+.team-side img,
+.player-avatar,
+.team-col img {
+    width: 35px;
+    height: 35px;
+}
+
+/* ================= KPI Cards ================= */
+.panel-card.kpi-card {
+    justify-content: center;
+    gap: 8px;
+}
+
+.kpi-card .kpi-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #70758A;
+}
+
+.kpi-card .kpi-value {
+    font-size: 26px;
+    font-weight: 700;
+}
+
+/* ================= Recent Matches ================= */
+.matches-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.match-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    align-items: center;
+    gap: 20px;
+}
+
+.match-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.match-item.match-score {
+    justify-self: center;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-weight: 700;
+    background-color: #F3F4F6;
+}
+
+.match-item.team-side {
+    gap: 9px;
+}
+
+.team-side img {
+    object-fit: contain;
+}
+
+/* ================= Top 5 Scorers ================= */
+.scorers-list {
+    flex: 1;
+}
+
+.scorers-table {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.scorers-table th {
+    padding-bottom: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border-bottom: 1px solid #DBDEE8;
+}
+
+.scorers-table td {
+    padding: 6px 0;
+    border-bottom: 1px solid #F0F2F7;
+}
+
+.scorers-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.col-rank {
+    width: 30px;
+    text-align: left;
+    font-weight: 700;
+}
+
+.col-player {
+    text-align: left;
+}
+
+.col-player .player-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.player-avatar {
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.col-goals {
+    width: 60px;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* ================= My Favorites ================= */
+.panel-card.favorite-teams,
+#dashboard-favorites {
+    position: relative;
+}
+
+.fav-teams-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* สถานะว่างเมื่อล็อกอินแล้วแต่ยังไม่มีทีมโปรด */
+.state-message {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #5E6378;
+}
+
+.state-message.with-blur {
+    background-color: rgba(235, 238, 245, 0.50);
+    backdrop-filter: blur(2px);
+}
+
+.state-message .submessage {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+#fav-state a {
+    color: #0E1129;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s ease;
+}
+
+#fav-state a:hover {
+    color: #5D25C4;
+}
+
+/* สถานะล็อก (เบลอการ์ดทั้งหมดและแสดงปุ่ม Log in ตรงกลาง) */
+#dashboard-favorites.is-locked {
+    min-height: 175px;
+}
+
+#dashboard-favorites.is-locked > :not(.favorites-lock) {
+    filter: blur(6px);
+    pointer-events: none;
+    user-select: none;
+}
+
+.favorites-lock {
+    display: none;
+}
+
+#dashboard-favorites.is-locked .favorites-lock {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    background: rgb(255 255 255 / 38%);
+    border-radius: inherit;
+}
+
+.favorites-lock a {
+    padding: 10px 18px;
+    border-radius: 8px;
+    background: #17152D;
+    color: #FFFFFF;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* รายการการ์ดทีมโปรด */
+.fav-teams-list {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.team-col {
+    width: 95px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.team-col p {
+    font-weight: 600;
+}
+
+.team-col .team-name {
+    font-size: 14px;
+    text-align: center;
+}
+
+.team-col .overview-result {
+    font-size: 12px;
+}
+
+.overview-result .win {
+    color: #34C759;
+}
+
+.overview-result .draw {
+    color: #FFCC00;
+}
+
+.overview-result .lose {
+    color: #FF383C;
+}

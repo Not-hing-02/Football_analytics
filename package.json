@@ -1,0 +1,25 @@
+{
+  "name": "football_analytics",
+  "version": "1.0.0",
+  "description": "Import the team's `Premier_League_5_Years.sql` into a PostgreSQL database. From\r the project root, run `npm ci`, set `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`,\r and `PGPASSWORD` for that database, and run `node server.mjs`. Open\r [Analytics](http://localhost:3000/analytics.html). The server reads the\r `pl_history` schema using the same PostgreSQL pool as Players and Teams.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Not-hing-02/Football_analytics.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Not-hing-02/Football_analytics/issues"
+  },
+  "homepage": "https://github.com/Not-hing-02/Football_analytics#readme",
+  "dependencies": {
+    "express": "^5.3.0",
+    "pg": "^8.23.1"
+  }
+}

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/my-fav-page.css">
     <script src="js/main-app.js" defer></script>
     <script src="js/myfav-app.js" defer></script>
-    <title>Premier League</title>
+    <title>My favorites · Premier League</title>
 </head>
 <body>
     <div class="container">
@@ -33,10 +33,10 @@
                 </ul>
             </div>
             <div class="bottom-nav" hidden>
-                <a href="#" class="btn-logout">
+                <button type="button" class="btn-logout">
                     <img src="assets/logout.svg" alt="icon-logout">
                     Log out
-                </a>
+                </button>
             </div>
         </nav>
 
@@ -53,7 +53,7 @@
                     </form>
                     <div class="profile" hidden>
                         <div class="photo-profile">
-                            <img src="assets/img.png" alt="photo">
+                            <img src="assets/img.jpg" alt="photo">
                         </div>
                         <div class="info-profile">
                             <p class="name">Username</p>
@@ -64,12 +64,21 @@
                 </div>
             </header>
 
+            <!-- Main Content -->
             <main class="main">
-                <!-- content -->
+                <div class="main-content">
+                    <!-- Category Filter Tabs -->
+                    <div class="filter-tabs">
+                        <button type="button" class="tab-btn active" data-filter="teams">Favorite Teams</button>
+                        <button type="button" class="tab-btn" data-filter="players">Favorite Players</button>
+                    </div>
+
+                    <!-- Favorites Grid (จะถูกแทนที่ด้วยข้อมูลจริงจาก JS) -->
+                    <div class="fav-content">
+                    </div>
+                </div>
             </main>
-        
         </div>
-        
     </div>
 </body>
 </html>

@@ -1,0 +1,286 @@
+/* ================= Main Layout ================= */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 30px;
+    color: #171A29;
+}
+
+/* ================= Search Input & Form ================= */
+.search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.search-form p {
+    font-size: 12px;
+    color: #5E6378;
+}
+
+.search-bar-group {
+    display: flex;
+    gap: 16px;
+}
+
+.search-bar-group #search {
+    flex: 2;
+    height: 48px;
+    padding: 0 14px;
+    border: 1px solid #5C26B8;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.search-bar-group #search:focus {
+    outline: none;
+    box-shadow: 0 0 0 1px #351076;
+}
+
+.search-bar-group .btn-search {
+    flex: 0.25;
+    min-width: 110px;
+    height: 48px;
+    padding: 0 14px;
+    background-color: #5C26B8;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.search-bar-group .btn-search:hover {
+    background-color: #351076;
+}
+
+.search-bar-group .btn-search:focus-visible {
+    outline: 2px solid #C7C9E0;
+    outline-offset: -3.5px;
+}
+
+/* ================= Filter Tabs & Season Select ================= */
+.filter-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 15px;
+}
+
+.filter-tabs .tab-btn {
+    width: 120px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid #DBDEE8;
+    background-color: #FFFFFF;
+    color: #5E6378;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn:not(.active):hover {
+    background-color: #DBDEE8;
+    border-color: #5E6378;
+}
+
+.filter-tabs .tab-btn.active {
+    background-color: #5C26B8;
+    color: #FFFFFF;
+}
+
+.season-filter {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #5E6378;
+    font-size: 14px;
+}
+
+.season-filter #season-select {
+    padding: 0 20px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid #DBDEE8;
+    color: #5E6378;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+#season-select:hover {
+    border-color: #5E6378;
+}
+
+.tab-btn:focus-visible,
+#season-select:focus {
+    outline: 1px solid #5E6378;
+}
+
+/* ================= Search Results & Categories ================= */
+.state-message {
+    margin-top: 15px;
+    font-size: 15px;
+    color: #5E6378;
+}
+
+.result-list {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.category {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* หัวข้อหมวด + ปุ่ม See more ทางขวา */
+.category-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.category-header h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #171A29;
+}
+
+.category-see-more {
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #5C26B8;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.category-see-more:hover {
+    background-color: #EDE7F8;
+    color: #351076;
+}
+
+/* Card รายการผลลัพธ์ */
+.list-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 80px;
+    padding: 12px 20px;
+    background-color: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.list-item.is-clickable {
+    cursor: pointer;
+}
+
+.list-item.is-clickable:hover {
+    border-color: #5C26B8;
+    box-shadow: 0 4px 12px rgba(23, 26, 41, 0.06);
+}
+
+.list-item img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.list-item.player-row img {
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.list-item .info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.info .header-info {
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: underline 1.5px transparent;
+    text-underline-offset: 2px;
+    color: #171A29;
+    transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+
+.list-item.is-clickable:hover .header-info {
+    color: #5C26B8;
+    text-decoration-color: currentColor;
+}
+
+.info .detail-info {
+    color: #5E6378;
+    font-size: 12px;
+}
+
+/* ปุ่ม Favorite ทางขวาของ Card */
+.card-action {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* ================= Pagination (โหมดหมวดเดี่ยว 15 card/หน้า) ================= */
+.search-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.search-pagination .page-btn {
+    height: 38px;
+    padding: 0 16px;
+    border: 1px solid #DBDEE8;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    color: #171A29;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search-pagination .page-btn:hover:not(:disabled) {
+    border-color: #5C26B8;
+    color: #5C26B8;
+    background-color: #F6F2FC;
+}
+
+.search-pagination .page-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.search-pagination .page-info {
+    font-size: 13px;
+    font-weight: 500;
+    color: #5E6378;
+}

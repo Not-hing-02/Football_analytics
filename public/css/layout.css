@@ -69,9 +69,9 @@
     padding: 0 16px;
 }
 
-/* Shared Sidebar Link Styles */
+/* Shared Sidebar Link & Logout Button Styles */
 .nav-links a,
-.bottom-nav a {
+.bottom-nav .btn-logout {
     display: flex;
     align-items: center;
     height: 40px;
@@ -80,18 +80,21 @@
     font-size: 13px;
     font-weight: 400;
     color: #C7C9E0;
-    text-decoration: none;
     transition: color 0.2s ease, background-color 0.2s ease;
 }
 
+.nav-links a {
+    text-decoration: none;
+}
+
 .nav-links a:hover,
-.bottom-nav a:hover {
+.bottom-nav .btn-logout:hover {
     color: #FFFFFF;
     background-color: #1C235D;
 }
 
 .nav-links a:focus-visible,
-.bottom-nav a:focus-visible {
+.bottom-nav .btn-logout:focus-visible {
     outline: 2px solid #C7C9E0;
 }
 
@@ -101,20 +104,19 @@
     font-weight: 600;
 }
 
-/* Logout Link Specifics */
-.bottom-nav a {
+/* Logout Button Specifics */
+.bottom-nav .btn-logout {
     gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
-.bottom-nav a:hover {
-    font-weight: 500;
-}
-
-.bottom-nav a img {
+.bottom-nav .btn-logout img {
     filter: invert(90%) sepia(6%) saturate(1694%) hue-rotate(195deg) brightness(93%) contrast(87%);
 }
 
-.bottom-nav a:hover img {
+.bottom-nav .btn-logout:hover img {
     filter: invert(100%) sepia(4%) saturate(17%) hue-rotate(192deg) brightness(104%) contrast(100%);
 }
 
@@ -227,4 +229,109 @@
     flex: 1;
     margin-top: 6px;
     padding: 0 30px;
+}
+
+/* ================= Shared Favorite Heart Buttons ================= */
+body .player-heart,
+body .standings-heart {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #788096;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: background-color 160ms ease, color 160ms ease;
+}
+
+body .player-heart svg,
+body .standings-heart svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+body .player-heart:hover,
+body .standings-heart:hover {
+    background: #FFF0F3;
+    color: #E33453;
+}
+
+body .player-heart[aria-pressed="true"],
+body .standings-heart[aria-pressed="true"] {
+    color: #E33453;
+}
+
+body .player-heart[aria-pressed="true"] svg,
+body .standings-heart[aria-pressed="true"] svg {
+    fill: currentColor;
+}
+
+/* ================= Shared Favorites Filter Buttons ================= */
+body #favorites-filter,
+body #team-favorites {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    min-height: 40px;
+    min-width: 150px;
+    margin-left: auto;
+    padding: 0 18px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: #5B27B6;
+    color: #FFFFFF;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 160ms ease;
+}
+
+body #favorites-filter:hover,
+body #team-favorites:hover {
+    background: #492090;
+}
+
+body #favorites-filter[aria-pressed="true"],
+body #team-favorites[aria-pressed="true"] {
+    background: #37166F;
+    box-shadow: 0 0 0 2px #BAA1EF;
+}
+
+body .player-heart:focus-visible,
+body .standings-heart:focus-visible,
+body #favorites-filter:focus-visible,
+body #team-favorites:focus-visible {
+    outline: 2px solid #9272E1;
+    outline-offset: 3px;
+}
+
+/* ================= Shared Club Logos ================= */
+.club-logo {
+    vertical-align: middle;
+}
+
+.fav-card .fav-photo.club-logo {
+    object-fit: contain;
+}
+
+.club-logo[hidden] {
+    display: none;
+}
+
+td > .club-logo {
+    margin-inline-end: 8px;
 }
